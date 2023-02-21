@@ -1,6 +1,7 @@
+import locale
+import enum
 import tkinter as tk
 import numpy as np
-import enum
 
 
 class Languages(enum.Enum):
@@ -183,5 +184,11 @@ class GameOfLife:
 
 
 if __name__ == '__main__':
+    # récupérer la langue de l'OS
+    if locale.getdefaultlocale()[0] in ["fr_FR", "fr_BE", "fr_CA", "fr_CH", "fr_LU"]:
+        Language_Appli = Languages.FR
+    else:
+        Language_Appli = Languages.EN
+
     game = GameOfLife(Language_Appli)
     game.show()
