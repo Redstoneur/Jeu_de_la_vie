@@ -13,7 +13,9 @@ class GameOfLife:
     pattern_menu: tk.OptionMenu
     running: bool
 
-    def __init__(self, master: tk.Tk) -> None:
+    def __init__(self, title: str = "Game_Of_Life") -> None:
+        master = tk.Tk()
+        master.title(title)
         self.master = master
         self.N = 50
         self.grid = np.zeros((self.N, self.N), dtype=int)
@@ -107,7 +109,5 @@ class GameOfLife:
 
 
 if __name__ == '__main__':
-    root = tk.Tk()
-    root.title('Jeu de la vie')
-    game = GameOfLife(root)
-    root.mainloop()
+    game = GameOfLife(title="Jeu de la vie")
+    game.master.mainloop()
