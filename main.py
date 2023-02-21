@@ -1,8 +1,56 @@
 import tkinter as tk
 import numpy as np
+import enum
+
+
+class Languages(enum.Enum):
+    FR = "fr"
+    EN = "en"
+
+    def __str__(self) -> str:
+        return self.value
+
+
+Language_Appli = Languages.FR
+
+Dictionary: dict = {
+    "fr": {
+        "title": "Jeu de la vie",
+        "init": "Réinitialiser",
+        "start": "Démarrer",
+        "stop": "Arrêter",
+        "patterns": {
+            "None": "Aucun",
+            "Glider": "Planeur",
+            "Blinker": "Clignotant",
+            "Lightweight spaceship": "Navire spatial léger",
+            "Full": "Total",
+            "Checkerboard": "Damier",
+            "Random": "Aléatoire"
+        }
+    },
+    "en": {
+        "title": "Game of Life",
+        "init": "Reset",
+        "start": "Start",
+        "stop": "Stop",
+        "pattern": "None",
+        "patterns": {
+            "None": "None",
+            "Glider": "Glider",
+            "Blinker": "Blinker",
+            "Lightweight spaceship": "Lightweight spaceship",
+            "Full": "Full",
+            "Checkerboard": "Checkerboard",
+            "Random": "Random"
+        }
+    }
+}
 
 
 class GameOfLife:
+    Wait_Time: int = 0
+    Language: Languages
     master: tk.Tk
     N: int
     grid: np.ndarray
@@ -11,12 +59,16 @@ class GameOfLife:
     start_button: tk.Button
     stop_button: tk.Button
     pattern_menu: tk.OptionMenu
+    wait_between_generations: tk.OptionMenu
     running: bool
 
-    def __init__(self, title: str = "Game_Of_Life") -> None:
-        master = tk.Tk()
-        master.title(title)
-        self.master = master
+    def __init__(self, lang: Languages) -> None:
+
+        self.Language = lang
+
+        self.master = tk.Tk()
+        self.master.title(Dictionary[self.Language.value]["title"])
+
         self.N = 50
         self.grid = np.zeros((self.N, self.N), dtype=int)
         self.create_widgets(width=500, height=500)
@@ -26,19 +78,32 @@ class GameOfLife:
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.toggle_cell)
 
-        self.init_button = tk.Button(self.master, text='Réinitialiser', command=self.init_grid)
+        self.init_button = tk.Button(self.master, text=Dictionary[self.Language.value]["init"], command=self.init_grid)
         self.init_button.pack(side=tk.LEFT, padx=10, pady=10)
 
-        self.start_button = tk.Button(self.master, text='Démarrer', command=self.start_animation)
+        self.start_button = tk.Button(self.master, text=Dictionary[self.Language.value]["start"],
+                                      command=self.start_animation)
         self.start_button.pack(side=tk.LEFT, padx=10, pady=10)
 
-        self.stop_button = tk.Button(self.master, text='Arrêter', command=self.stop_animation)
+        self.stop_button = tk.Button(self.master, text=Dictionary[self.Language.value]["stop"],
+                                     command=self.stop_animation)
         self.stop_button.pack(side=tk.LEFT, padx=10, pady=10)
 
-        self.pattern_menu = tk.OptionMenu(self.master, tk.StringVar(), 'Aucun', 'Planeur', 'Clignotant',
-                                          'Navire spatial léger', 'Full', 'Damier', 'Random',
+        self.pattern_menu = tk.OptionMenu(self.master, tk.StringVar(),
+                                          Dictionary[self.Language.value]["patterns"]["None"],
+                                          Dictionary[self.Language.value]["patterns"]["Glider"],
+                                          Dictionary[self.Language.value]["patterns"]["Blinker"],
+                                          Dictionary[self.Language.value]["patterns"]["Lightweight spaceship"],
+                                          Dictionary[self.Language.value]["patterns"]["Full"],
+                                          Dictionary[self.Language.value]["patterns"]["Checkerboard"],
+                                          Dictionary[self.Language.value]["patterns"]["Random"],
                                           command=self.select_pattern)
         self.pattern_menu.pack(side=tk.LEFT, padx=10, pady=10)
+
+        self.wait_between_generations = tk.OptionMenu(self.master, tk.IntVar(),
+                                                      0, 10, 25, 50, 100, 250, 500, 1000,
+                                                      command=self.select_wait)
+        self.wait_between_generations.pack(side=tk.LEFT, padx=10, pady=10)
 
     def init_grid(self) -> None:
         self.grid = np.zeros((self.N, self.N), dtype=int)
@@ -47,6 +112,7 @@ class GameOfLife:
     def start_animation(self) -> None:
         self.running = True
         while self.running:
+            self.master.after(self.Wait_Time)
             self.simulate_generation()
             self.draw_grid()
             self.master.update()
@@ -83,31 +149,39 @@ class GameOfLife:
 
     def select_pattern(self, pattern: str) -> None:
         self.init_grid()
-        if pattern == 'Planeur':
+        if pattern == Dictionary[self.Language.value]["patterns"]["Glider"]:
             # planeur dans le coin supérieur gauche qui se déplace vers le bas
             self.grid[0, 1] = 1
             self.grid[1, 2] = 1
             self.grid[2, 0:3] = 1
-        elif pattern == 'Clignotant':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Blinker"]:
             # clignotant dans le coin supérieur droit
             self.grid[1:3, 1] = 1
             self.grid[1:3, 2] = 1
-        elif pattern == 'Navire spatial léger':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Lightweight spaceship"]:
             # navire spatial léger dans le coin supérieur droit qui se déplace vers le bas
             # TODO: à compléter
             pass
-        elif pattern == 'Damier':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Checkerboard"]:
             self.grid[::2, ::2] = 1
             self.grid[1::2, 1::2] = 1
-        elif pattern == 'Random':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Random"]:
             self.grid = np.random.randint(0, 2, (self.N, self.N))
-        elif pattern == 'Full':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Full"]:
             self.grid = np.ones((self.N, self.N), dtype=int)
-        elif pattern == 'Aucun':
+        elif pattern == Dictionary[self.Language.value]["patterns"]["None"]:
+            pass
+        else:
             pass
         self.draw_grid()
 
+    def select_wait(self, wait: int) -> None:
+        self.Wait_Time = wait
+
+    def show(self):
+        self.master.mainloop()
+
 
 if __name__ == '__main__':
-    game = GameOfLife(title="Jeu de la vie")
-    game.master.mainloop()
+    game = GameOfLife(Language_Appli)
+    game.show()
