@@ -150,30 +150,37 @@ class GameOfLife:
 
     def select_pattern(self, pattern: str) -> None:
         self.init_grid()
+
         if pattern == Dictionary[self.Language.value]["patterns"]["Glider"]:
-            # planeur dans le coin supérieur gauche qui se déplace vers le bas
+            # Glider in the upper right corner that moves down
             self.grid[0, 1] = 1
             self.grid[1, 2] = 1
             self.grid[2, 0:3] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Blinker"]:
-            # clignotant dans le coin supérieur droit
+            # Blinker
             self.grid[1:3, 1] = 1
             self.grid[1:3, 2] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Lightweight spaceship"]:
-            # navire spatial léger dans le coin supérieur droit qui se déplace vers le bas
-            # TODO: à compléter
+            # Lightweight spaceship in the upper right corner that moves down
+            # TODO: to complete
             pass
         elif pattern == Dictionary[self.Language.value]["patterns"]["Checkerboard"]:
+            # Checkerboard
             self.grid[::2, ::2] = 1
             self.grid[1::2, 1::2] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Random"]:
+            # Random
             self.grid = np.random.randint(0, 2, (self.N, self.N))
         elif pattern == Dictionary[self.Language.value]["patterns"]["Full"]:
+            # Full cells
             self.grid = np.ones((self.N, self.N), dtype=int)
         elif pattern == Dictionary[self.Language.value]["patterns"]["None"]:
+            # None
             pass
         else:
+            # None
             pass
+
         self.draw_grid()
 
     def select_wait(self, wait: int) -> None:
@@ -184,7 +191,7 @@ class GameOfLife:
 
 
 if __name__ == '__main__':
-    # récupérer la langue de l'OS
+    # get the language of the system
     if locale.getdefaultlocale()[0] in ["fr_FR", "fr_BE", "fr_CA", "fr_CH", "fr_LU"]:
         Language_Appli = Languages.FR
     else:
