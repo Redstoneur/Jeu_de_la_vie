@@ -1,4 +1,0 @@
-locale
-enum
-tkinter
-numpy

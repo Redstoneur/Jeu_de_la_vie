@@ -1,0 +1,4 @@
+tkinter
+numpy
+locale
+enum
