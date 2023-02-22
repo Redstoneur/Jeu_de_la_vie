@@ -5,16 +5,20 @@ import numpy as np
 
 
 class Languages(enum.Enum):
-    FR = "fr"
-    EN = "en"
+    FR = "fr"  # French
+    EN = "en"  # English
 
     def __str__(self) -> str:
+        """
+        Return the language name
+        :return: The language name
+        """
         return self.value
 
 
-Language_Appli = Languages.FR
+Language_Appli: Languages = Languages.FR  # Default language
 
-Dictionary: dict = {
+Dictionary: dict = {  # Dictionary of all the words used in the application
     "fr": {
         "title": "Jeu de la vie",
         "init": "Réinitialiser",
@@ -56,17 +60,21 @@ Dictionary: dict = {
 
 
 class GameOfLife:
-    Wait_Time: int = 0
-    Language: Languages
-    master: tk.Tk
-    N: int
-    grid: np.ndarray
-    canvas: tk.Canvas
-    label_wait: tk.Label
-    label_count: tk.Label
-    running: bool
+    Wait_Time: int = 0  # Time between each generation
+    Language: Languages  # Language of the application
+    master: tk.Tk  # Main window
+    N: int  # Size of the grid
+    grid: np.ndarray  # Grid of the game
+    canvas: tk.Canvas  # Canvas of the grid
+    label_wait: tk.Label  # Label of the wait time
+    label_count: tk.Label  # Label of the generation count
+    running: bool  # Is the animation running
 
     def __init__(self, lang: Languages) -> None:
+        """
+        Constructor of the class
+        :param lang: The language of the application
+        """
 
         self.Language = lang
 
@@ -78,6 +86,12 @@ class GameOfLife:
         self.create_widgets(width=500, height=500)
 
     def create_widgets(self, width: int = 500, height: int = 500) -> None:
+        """
+        Create the widgets of the application
+        :param width:
+        :param height:
+        :return: None
+        """
         # Create a menu bar
         menu_bar = tk.Menu(self.master)
         self.master.config(menu=menu_bar)
@@ -150,11 +164,19 @@ class GameOfLife:
         self.label_wait.pack()
 
     def init_grid(self) -> None:
+        """
+        Initialize the grid
+        :return: None
+        """
         self.grid = np.zeros((self.N, self.N), dtype=int)
         self.draw_grid()
         self.update_count()
 
     def start_animation(self) -> None:
+        """
+        Start the animation
+        :return: None
+        """
         self.running = True
         while self.running:
             self.update_count()
@@ -164,10 +186,18 @@ class GameOfLife:
             self.master.update()
 
     def stop_animation(self) -> None:
+        """
+        Stop the animation
+        :return: None
+        """
         self.running = False
         self.update_count()
 
     def simulate_generation(self) -> None:
+        """
+        Simulate a generation
+        :return: None
+        """
         new_grid = np.zeros((self.N, self.N), dtype=int)
         for i in range(self.N):
             for j in range(self.N):
@@ -182,12 +212,21 @@ class GameOfLife:
         self.grid = new_grid
 
     def toggle_cell(self, event: tk.Event) -> None:
+        """
+        Toggle the state of a cell
+        :param event: Event
+        :return: None
+        """
         row = int(event.y / 10)
         col = int(event.x / 10)
         self.grid[row, col] = 1 - self.grid[row, col]
         self.draw_grid()
 
     def draw_grid(self) -> None:
+        """
+        Draw the grid
+        :return: None
+        """
         self.canvas.delete(tk.ALL)
         for i in range(self.N):
             for j in range(self.N):
@@ -195,6 +234,11 @@ class GameOfLife:
                     self.canvas.create_rectangle(j * 10, i * 10, j * 10 + 10, i * 10 + 10, fill='black')
 
     def select_pattern(self, pattern: str) -> None:
+        """
+        Select a pattern
+        :param pattern: Pattern
+        :return: None
+        """
         self.init_grid()
 
         if pattern == Dictionary[self.Language.value]["patterns"]["Glider"]:
@@ -249,16 +293,33 @@ class GameOfLife:
         self.update_count()
 
     def count_alive_cells(self) -> int:
+        """
+        Count the number of alive cells
+        :return: Number of alive cells
+        """
         return int(np.sum(self.grid))
 
     def update_count(self) -> None:
+        """
+        Update the count of alive cells
+        :return: None
+        """
         self.label_count.config(text="Count of alive cells : " + str(self.count_alive_cells()))
 
     def select_wait(self, wait: int) -> None:
+        """
+        Select the wait time between generations
+        :param wait: Wait time
+        :return: None
+        """
         self.Wait_Time = wait
         self.label_wait.config(text="Wait between generations : " + str(self.Wait_Time) + " ms")
 
     def show(self):
+        """
+        Show the window
+        :return: None
+        """
         self.master.mainloop()
 
 
