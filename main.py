@@ -24,7 +24,10 @@ Dictionary: dict = {
             "None": "Aucun",
             "Glider": "Planeur",
             "Blinker": "Clignotant",
-            "Lightweight spaceship": "Navire spatial léger",
+            "Circle": "Cercle",
+            "Vertical": "Vertical",
+            "Horizontal": "Horizontal",
+            "square": "Carré",
             "Full": "Total",
             "Checkerboard": "Damier",
             "Random": "Aléatoire"
@@ -40,7 +43,10 @@ Dictionary: dict = {
             "None": "None",
             "Glider": "Glider",
             "Blinker": "Blinker",
-            "Lightweight spaceship": "Lightweight spaceship",
+            "Circle": "Circle",
+            "Vertical": "Vertical",
+            "Horizontal": "Horizontal",
+            "square": "Square",
             "Full": "Full",
             "Checkerboard": "Checkerboard",
             "Random": "Random"
@@ -56,11 +62,8 @@ class GameOfLife:
     N: int
     grid: np.ndarray
     canvas: tk.Canvas
-    init_button: tk.Button
-    start_button: tk.Button
-    stop_button: tk.Button
-    pattern_menu: tk.OptionMenu
-    wait_between_generations: tk.OptionMenu
+    label_wait: tk.Label
+    label_count: tk.Label
     running: bool
 
     def __init__(self, lang: Languages) -> None:
@@ -75,44 +78,86 @@ class GameOfLife:
         self.create_widgets(width=500, height=500)
 
     def create_widgets(self, width: int = 500, height: int = 500) -> None:
-        self.canvas = tk.Canvas(self.master, width=width, height=height)
+        # Create a menu bar
+        menu_bar = tk.Menu(self.master)
+        self.master.config(menu=menu_bar)
+
+        # Add a menu item
+        menu_bar.add_command(label=Dictionary[self.Language.value]["init"], command=self.init_grid)
+        menu_bar.add_command(label=Dictionary[self.Language.value]["start"], command=self.start_animation)
+        menu_bar.add_command(label=Dictionary[self.Language.value]["stop"], command=self.stop_animation)
+
+        # Create a Patterns menu
+        pattern_menu = tk.Menu(menu_bar, tearoff=0)
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["None"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["None"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Glider"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Blinker"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Blinker"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Circle"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Circle"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Vertical"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Vertical"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Horizontal"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Horizontal"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["square"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["square"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Full"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Full"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Checkerboard"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Checkerboard"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Random"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Random"]))
+        # Add the Patterns menu to the menu bar
+        menu_bar.add_cascade(label="Patterns", menu=pattern_menu)
+
+        # Create a wait between generations menu
+        wait_between_generations = tk.Menu(menu_bar, tearoff=0)
+        wait_between_generations.add_command(label="0 ms", command=lambda: self.select_wait(0))
+        wait_between_generations.add_command(label="10 ms", command=lambda: self.select_wait(10))
+        wait_between_generations.add_command(label="25 ms", command=lambda: self.select_wait(25))
+        wait_between_generations.add_command(label="50 ms", command=lambda: self.select_wait(50))
+        wait_between_generations.add_command(label="100 ms", command=lambda: self.select_wait(100))
+        wait_between_generations.add_command(label="250 ms", command=lambda: self.select_wait(250))
+        wait_between_generations.add_command(label="500 ms", command=lambda: self.select_wait(500))
+        wait_between_generations.add_command(label="1000 ms", command=lambda: self.select_wait(1000))
+        # Add the wait between generations menu to the menu bar
+        menu_bar.add_cascade(label="Wait between generations", menu=wait_between_generations)
+
+        # Create a canvas
+        self.canvas = tk.Canvas(self.master, width=width, height=height, bg="white", borderwidth=1,
+                                relief="groove")
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.toggle_cell)
 
-        self.init_button = tk.Button(self.master, text=Dictionary[self.Language.value]["init"], command=self.init_grid)
-        self.init_button.pack(side=tk.LEFT, padx=10, pady=10)
+        # print Count of alive cells
+        self.label_count = tk.Label(self.master, text="Count of alive cells : " + str(self.count_alive_cells()))
+        self.label_count.pack()
 
-        self.start_button = tk.Button(self.master, text=Dictionary[self.Language.value]["start"],
-                                      command=self.start_animation)
-        self.start_button.pack(side=tk.LEFT, padx=10, pady=10)
-
-        self.stop_button = tk.Button(self.master, text=Dictionary[self.Language.value]["stop"],
-                                     command=self.stop_animation)
-        self.stop_button.pack(side=tk.LEFT, padx=10, pady=10)
-
-        self.pattern_menu = tk.OptionMenu(self.master, tk.StringVar(),
-                                          Dictionary[self.Language.value]["patterns"]["None"],
-                                          Dictionary[self.Language.value]["patterns"]["Glider"],
-                                          Dictionary[self.Language.value]["patterns"]["Blinker"],
-                                          Dictionary[self.Language.value]["patterns"]["Lightweight spaceship"],
-                                          Dictionary[self.Language.value]["patterns"]["Full"],
-                                          Dictionary[self.Language.value]["patterns"]["Checkerboard"],
-                                          Dictionary[self.Language.value]["patterns"]["Random"],
-                                          command=self.select_pattern)
-        self.pattern_menu.pack(side=tk.LEFT, padx=10, pady=10)
-
-        self.wait_between_generations = tk.OptionMenu(self.master, tk.IntVar(),
-                                                      0, 10, 25, 50, 100, 250, 500, 1000,
-                                                      command=self.select_wait)
-        self.wait_between_generations.pack(side=tk.LEFT, padx=10, pady=10)
+        # print time wait between generations
+        self.label_wait = tk.Label(self.master, text="Wait between generations : " + str(self.Wait_Time) + " ms")
+        self.label_wait.pack()
 
     def init_grid(self) -> None:
         self.grid = np.zeros((self.N, self.N), dtype=int)
         self.draw_grid()
+        self.update_count()
 
     def start_animation(self) -> None:
         self.running = True
         while self.running:
+            self.update_count()
             self.master.after(self.Wait_Time)
             self.simulate_generation()
             self.draw_grid()
@@ -120,6 +165,7 @@ class GameOfLife:
 
     def stop_animation(self) -> None:
         self.running = False
+        self.update_count()
 
     def simulate_generation(self) -> None:
         new_grid = np.zeros((self.N, self.N), dtype=int)
@@ -160,10 +206,6 @@ class GameOfLife:
             # Blinker
             self.grid[1:3, 1] = 1
             self.grid[1:3, 2] = 1
-        elif pattern == Dictionary[self.Language.value]["patterns"]["Lightweight spaceship"]:
-            # Lightweight spaceship in the upper right corner that moves down
-            # TODO: to complete
-            pass
         elif pattern == Dictionary[self.Language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
             self.grid[::2, ::2] = 1
@@ -171,6 +213,28 @@ class GameOfLife:
         elif pattern == Dictionary[self.Language.value]["patterns"]["Random"]:
             # Random
             self.grid = np.random.randint(0, 2, (self.N, self.N))
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Circle"]:
+            # Circle
+            self.grid = np.zeros((self.N, self.N), dtype=int)
+            for i in range(self.N):
+                for j in range(self.N):
+                    if (i - self.N / 2) ** 2 + (j - self.N / 2) ** 2 < (self.N / 2) ** 2:
+                        self.grid[i, j] = 1
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Horizontal"]:
+            # Horizontal
+            self.grid = np.zeros((self.N, self.N), dtype=int)
+            self.grid[0, :] = 1
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Vertical"]:
+            # Vertical
+            self.grid = np.zeros((self.N, self.N), dtype=int)
+            self.grid[:, 0] = 1
+        elif pattern == Dictionary[self.Language.value]["patterns"]["square"]:
+            # Diagonal from top left to bottom right corner to bottom left to top right corner
+            self.grid = np.zeros((self.N, self.N), dtype=int)
+            self.grid[0, :] = 1
+            self.grid[:, 0] = 1
+            self.grid[:, -1] = 1
+            self.grid[-1, :] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Full"]:
             # Full cells
             self.grid = np.ones((self.N, self.N), dtype=int)
@@ -182,9 +246,17 @@ class GameOfLife:
             pass
 
         self.draw_grid()
+        self.update_count()
+
+    def count_alive_cells(self) -> int:
+        return int(np.sum(self.grid))
+
+    def update_count(self) -> None:
+        self.label_count.config(text="Count of alive cells : " + str(self.count_alive_cells()))
 
     def select_wait(self, wait: int) -> None:
         self.Wait_Time = wait
+        self.label_wait.config(text="Wait between generations : " + str(self.Wait_Time) + " ms")
 
     def show(self):
         self.master.mainloop()
