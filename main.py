@@ -1,5 +1,6 @@
 import enum
 import locale
+import random as rd
 import tkinter as tk
 
 import numpy as np
@@ -291,8 +292,10 @@ class GameOfLife:
             self.grid[2, 0:3] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Blinker"]:
             # Blinker
-            self.grid[1:3, 1] = 1
-            self.grid[1:3, 2] = 1
+            if rd.randint(0, 1) == 0:
+                self.grid[4:4 + 3, 4] = 1
+            else:
+                self.grid[4, 4:4 + 3] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
             self.grid[::2, ::2] = 1
