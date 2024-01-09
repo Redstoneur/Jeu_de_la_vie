@@ -215,10 +215,10 @@ class GameOfLife:
         :return: None
         """
         self.running = True
+        self.master.after(self.dimh)
         while self.running:
             self.update_count()
             self.master.after(self.Wait_Time)
-            self.master.after(self.dimh)
             self.simulate_generation()
             self.draw_grid()
             self.master.update()
