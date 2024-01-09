@@ -6,6 +6,9 @@ import numpy as np
 
 
 class Languages(enum.Enum):
+    """
+    Languages of the application
+    """
     FR = "fr"  # French
     EN = "en"  # English
 
@@ -61,6 +64,9 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
 
 
 class GameOfLife:
+    """
+    Game of life class
+    """
     Wait_Time: int = 0  # Time between each generation
     Language: Languages  # Language of the application
     master: tk.Tk  # Main window
