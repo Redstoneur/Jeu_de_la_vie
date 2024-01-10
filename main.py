@@ -93,7 +93,7 @@ Dimensions: dict = {
 }
 
 
-class Dimensions_Windows(tk.Toplevel):
+class DimensionsWindows(tk.Toplevel):
     """
     Dimensions of the windows
     """
@@ -158,8 +158,8 @@ class Dimensions_Windows(tk.Toplevel):
         row += 1
         column = 0
 
-        Default = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Default']}", command=self.default)
-        Default.grid(
+        default = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Default']}", command=self.default)
+        default.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
             pady=self.components_dim / 10
@@ -167,8 +167,8 @@ class Dimensions_Windows(tk.Toplevel):
 
         column += 1
 
-        MaxDim = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['MaxDim']}", command=self.max_dim)
-        MaxDim.grid(
+        max_dim = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['MaxDim']}", command=self.max_dim)
+        max_dim.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
             pady=self.components_dim / 10
@@ -176,8 +176,8 @@ class Dimensions_Windows(tk.Toplevel):
 
         column += 1
 
-        Validate = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Validate']}", command=self.validate)
-        Validate.grid(
+        validate = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Validate']}", command=self.validate)
+        validate.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
             pady=self.components_dim / 10
@@ -185,8 +185,8 @@ class Dimensions_Windows(tk.Toplevel):
 
         column += 1
 
-        Cancel = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Cancel']}", command=self.cancel)
-        Cancel.grid(
+        cancel = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Cancel']}", command=self.cancel)
+        cancel.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
             pady=self.components_dim / 10
@@ -517,17 +517,17 @@ class GameOfLife:
             Dimensions["Interface"]["Width"] = self.dimw
 
         # Create an instance of Dimensions_Windows
-        dimensions_window = Dimensions_Windows(lang=self.Language)
+        dimensions_window = DimensionsWindows(lang=self.Language)
         dimensions_window.wait_window()
 
         if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
             if Dimensions["Interface"]["Height"] % 10 != 0:
-                # arondir au multiple de 10 le plus proche
+                # arrondir au multiple de 10 le plus proche
                 self.dimh = int(Dimensions["Interface"]["Height"] / 10) * 10
             else:
                 self.dimh = Dimensions["Interface"]["Height"]
             if Dimensions["Interface"]["Width"] % 10 != 0:
-                # arondir au multiple de 10 le plus proche
+                # arrondir au multiple de 10 le plus proche
                 self.dimw = int(Dimensions["Interface"]["Width"] / 10) * 10
             else:
                 self.dimw = Dimensions["Interface"]["Width"]
