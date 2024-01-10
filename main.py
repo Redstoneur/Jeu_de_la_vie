@@ -63,6 +63,134 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
     }
 }
 
+Dimensions: dict = {
+    "Interface": {
+        "Height": 500,
+        "Width": 500
+    },
+    "Interface_Default": {
+        "Height": 500,
+        "Width": 500
+    }
+}
+
+
+class Dimensions_Windows(tk.Toplevel):
+    """
+    Dimensions of the windows
+    """
+    components_dim: int = 10  # Dimensions of the components
+    text_area_height: tk.Text  # Text area height
+    text_area_width: tk.Text  # Text area width
+
+    def __init__(self) -> None:
+        """
+        Constructor of the class
+        """
+        super().__init__()
+        self.title("Dimensions")
+        self.create_widgets()
+        self.resizable(False, False)
+
+    def create_widgets(self) -> None:
+        """
+        Create the widgets of the application
+        :return: None
+        """
+
+        row = 0
+        column = 0
+
+        label_1 = tk.Label(self, text="Height", font=("Arial", 10))
+        label_1.grid(
+            row=row, column=column, sticky="nsew"
+        )
+
+        column += 1
+
+        self.text_area_height = tk.Text(self, height=1, width=1)
+        self.text_area_height.insert(tk.END, Dimensions["Interface"]["Height"])
+        self.text_area_height.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        column += 1
+
+        label_2 = tk.Label(self, text="* Width", font=("Arial", 10))
+        label_2.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        column += 1
+
+        self.text_area_width = tk.Text(self, height=1, width=1)
+        self.text_area_width.insert(tk.END, Dimensions["Interface"]["Width"])
+        self.text_area_width.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        row += 1
+        column = 0
+
+        Default = tk.Button(self, text="Default", command=self.default)
+        Default.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        column += 1
+
+        Validate = tk.Button(self, text="Validate", command=self.validate)
+        Validate.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        column += 2
+
+        Cancel = tk.Button(self, text="Cancel", command=self.cancel)
+        Cancel.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+    def validate(self) -> None:
+        """
+        Validate the dimensions
+        :return: None
+        """
+        try:
+            Dimensions["Interface"]["Height"] = int(self.text_area_height.get("1.0", tk.END))
+            Dimensions["Interface"]["Width"] = int(self.text_area_width.get("1.0", tk.END))
+        except ValueError:
+            pass
+        self.destroy()
+
+    def cancel(self) -> None:
+        """
+        Cancel the dimensions
+        :return: None
+        """
+        self.destroy()
+
+    def default(self) -> None:
+        """
+        Set the default dimensions
+        :return: None
+        """
+        Dimensions["Interface"]["Height"] = Dimensions["Interface_Default"]["Height"]
+        Dimensions["Interface"]["Width"] = Dimensions["Interface_Default"]["Width"]
+        self.destroy()
+
 
 class GameOfLife:
     """
@@ -75,7 +203,8 @@ class GameOfLife:
     canvas: tk.Canvas  # Canvas of the grid
     label_wait: tk.Label  # Label of the wait time
     label_count: tk.Label  # Label of the generation count
-    label_data: tk.Label
+    label_data: tk.Label  # Label of the data
+    button_dim: tk.Button  # Button to change the dimensions
     running: bool  # Is the animation running
     dimh: int = 0
     dimw: int = 0
@@ -206,6 +335,10 @@ class GameOfLife:
         self.label_data = tk.Label(self.master, text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(
             self.nh) + "*" + str(self.nw))
         self.label_data.pack()
+
+        # Create a button to change the dimensions
+        self.button_dim = tk.Button(self.master, text="Change dimensions", command=self.change_dim_window)
+        self.button_dim.pack()
 
     def init_grid(self) -> None:
         """
@@ -366,6 +499,41 @@ class GameOfLife:
         :return: None
         """
         self.master.mainloop()
+
+    def change_dim_window(self):
+        """
+        Change the dimension by opening a new window
+        :return: None
+        """
+        if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
+            Dimensions["Interface"]["Height"] = self.dimh
+            Dimensions["Interface"]["Width"] = self.dimw
+
+        # Create an instance of Dimensions_Windows
+        dimensions_window = Dimensions_Windows()
+        dimensions_window.wait_window()
+
+        print(Dimensions["Interface"]["Height"])
+        print(Dimensions["Interface"]["Width"])
+
+        if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
+            if Dimensions["Interface"]["Height"] % 10 != 0:
+                # arondir au multiple de 10 le plus proche
+                self.dimh = int(Dimensions["Interface"]["Height"] / 10) * 10
+            else:
+                self.dimh = Dimensions["Interface"]["Height"]
+            if Dimensions["Interface"]["Width"] % 10 != 0:
+                # arondir au multiple de 10 le plus proche
+                self.dimw = int(Dimensions["Interface"]["Width"] / 10) * 10
+            else:
+                self.dimw = Dimensions["Interface"]["Width"]
+
+            self.nh = int(self.dimh / 10)
+            self.nw = int(self.dimw / 10)
+            self.canvas.config(height=self.dimh, width=self.dimw)
+            self.init_grid()
+            self.label_data.config(
+                text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(self.nh) + "*" + str(self.nw))
 
     def change_dim(self, target: str, action: str, length: int) -> None:
         """
