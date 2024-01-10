@@ -31,8 +31,9 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
         "stop": "Arrêter",
         "patterns": {
             "None": "Aucun",
-            "Glider": "Planeur",
             "Blinker": "Clignotant",
+            "Glider": "Planeur",
+            "Glider_Generator": "Générateur de planeurs",
             "Circle": "Cercle",
             "Vertical": "Vertical",
             "Horizontal": "Horizontal",
@@ -59,8 +60,9 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
         "pattern": "None",
         "patterns": {
             "None": "None",
-            "Glider": "Glider",
             "Blinker": "Blinker",
+            "Glider": "Glider",
+            "Glider_Generator": "Glider generator",
             "Circle": "Circle",
             "Vertical": "Vertical",
             "Horizontal": "Horizontal",
@@ -89,7 +91,11 @@ Dimensions: dict = {
     "Interface_Default": {
         "Height": 500,
         "Width": 500
-    }
+    },
+    "Interface_Min": {
+        "Height": 160,
+        "Width": 370
+    },
 }
 
 
@@ -281,12 +287,15 @@ class GameOfLife:
         pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["None"],
                                  command=lambda: self.select_pattern(
                                      Dictionary[self.Language.value]["patterns"]["None"]))
-        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider"],
-                                 command=lambda: self.select_pattern(
-                                     Dictionary[self.Language.value]["patterns"]["Glider"]))
         pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Blinker"],
                                  command=lambda: self.select_pattern(
                                      Dictionary[self.Language.value]["patterns"]["Blinker"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Glider"]))
+        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider_Generator"],
+                                 command=lambda: self.select_pattern(
+                                     Dictionary[self.Language.value]["patterns"]["Glider_Generator"]))
         pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Circle"],
                                  command=lambda: self.select_pattern(
                                      Dictionary[self.Language.value]["patterns"]["Circle"]))
@@ -330,6 +339,10 @@ class GameOfLife:
         self.canvas = tk.Canvas(self.master, width=width, height=height, bg="white", borderwidth=1, relief="groove")
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.toggle_cell)
+
+        # Lier le changement de forme du pointeur à l'événement de survol du canevas
+        self.canvas.bind("<Enter>", self.change_cursor_enter)
+        self.canvas.bind("<Leave>", self.change_cursor_leave)
 
         self.dim_h = height
         self.dim_w = width
@@ -427,17 +440,114 @@ class GameOfLife:
         :return: None
         """
         self.init_grid()
-        if pattern == Dictionary[self.Language.value]["patterns"]["Glider"]:
+        if pattern == Dictionary[self.Language.value]["patterns"]["Blinker"]:
+            # Blinker
+            init: int = 1
+            if rd.randint(0, 1) == 0:
+                self.grid[init:init + 3, init] = 1
+            else:
+                self.grid[init, init:init + 3] = 1
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Glider"]:
             # Glider in the upper right corner that moves down
             self.grid[0, 1] = 1
             self.grid[1, 2] = 1
             self.grid[2, 0:3] = 1
-        elif pattern == Dictionary[self.Language.value]["patterns"]["Blinker"]:
-            # Blinker
-            if rd.randint(0, 1) == 0:
-                self.grid[4:4 + 3, 4] = 1
-            else:
-                self.grid[4, 4:4 + 3] = 1
+        elif pattern == Dictionary[self.Language.value]["patterns"]["Glider_Generator"]:
+            # Glider generator
+            mage: int = 1
+
+            col: int = 1
+
+            li: int = 5 + mage
+            self.grid[li:li + 2, col] = 1
+
+            col += 1
+
+            li = 5 + mage
+            self.grid[li:li + 2, col] = 1
+
+            col += 9
+
+            li = 5 + mage
+            self.grid[li:li + 3, col] = 1
+
+            col += 1
+
+            li = 4 + mage
+            self.grid[li, col] = 1
+            li += 4
+            self.grid[li, col] = 1
+
+            col += 1
+
+            li = 3 + mage
+            self.grid[li, col] = 1
+            li += 6
+            self.grid[li, col] = 1
+
+            col += 1
+
+            li = 3 + mage
+            self.grid[li, col] = 1
+            li += 6
+            self.grid[li, col] = 1
+
+            col += 1
+
+            li = 6 + mage
+            self.grid[li, col] = 1
+
+            col += 1
+
+            li = 4 + mage
+            self.grid[li, col] = 1
+            li += 4
+            self.grid[li, col] = 1
+
+            col += 1
+
+            li = 5 + mage
+            self.grid[li:li + 3, col] = 1
+
+            col += 1
+
+            li = 6 + mage
+            self.grid[li, col] = 1
+
+            col += 3
+
+            li = 3 + mage
+            self.grid[li:li + 3, col] = 1
+
+            col += 1
+
+            li = 3 + mage
+            self.grid[li:li + 3, col] = 1
+
+            col += 1
+
+            li = 2 + mage
+            self.grid[li, col] = 1
+            li += 4
+            self.grid[li, col] = 1
+
+            col += 2
+
+            li = 1 + mage
+            self.grid[li:li + 2, col] = 1
+            li += 5
+            self.grid[li:li + 2, col] = 1
+
+            col += 10
+
+            li = 3 + mage
+            self.grid[li:li + 2, col] = 1
+
+            col += 1
+
+            li = 3 + mage
+            self.grid[li:li + 2, col] = 1
+
         elif pattern == Dictionary[self.Language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
             self.grid[::2, ::2] = 1
@@ -448,9 +558,12 @@ class GameOfLife:
         elif pattern == Dictionary[self.Language.value]["patterns"]["Circle"]:
             # Circle
             self.grid = np.zeros((self.nh, self.nw), dtype=int)
+            radius = min(self.nh, self.nw) // 4
+            center_i, center_j = self.nh // 2, self.nw // 2
+
             for i in range(self.nh):
                 for j in range(self.nw):
-                    if (i - self.N / 2) ** 2 + (j - self.N / 2) ** 2 < (self.N / 2) ** 2:
+                    if (i - center_i) ** 2 + (j - center_j) ** 2 < radius ** 2:
                         self.grid[i, j] = 1
         elif pattern == Dictionary[self.Language.value]["patterns"]["Horizontal"]:
             # Horizontal
@@ -523,6 +636,11 @@ class GameOfLife:
         dimensions_window.wait_window()
 
         if Dimensions["Interface"]["Height"] != self.dim_h or Dimensions["Interface"]["Width"] != self.dim_w:
+            if Dimensions["Interface"]["Height"] < Dimensions["Interface_Min"]["Height"]:
+                Dimensions["Interface"]["Height"] = Dimensions["Interface_Min"]["Height"]
+            if Dimensions["Interface"]["Width"] < Dimensions["Interface_Min"]["Width"]:
+                Dimensions["Interface"]["Width"] = Dimensions["Interface_Min"]["Width"]
+
             if Dimensions["Interface"]["Height"] % 10 != 0:
                 # arrondir au multiple de 10 le plus proche
                 self.dim_h = int(Dimensions["Interface"]["Height"] / 10) * 10
@@ -540,6 +658,14 @@ class GameOfLife:
             self.init_grid()
             self.label_data.config(
                 text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw))
+
+    def change_cursor_enter(self, event):
+        # Changer la forme du pointeur en "cross" lorsque la souris entre dans le canevas
+        self.canvas.config(cursor="plus")
+
+    def change_cursor_leave(self, event):
+        # Changer la forme du pointeur en "arrow" lorsque la souris quitte le canevas
+        self.canvas.config(cursor="arrow")
 
 
 if __name__ == '__main__':
