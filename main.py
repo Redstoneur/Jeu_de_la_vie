@@ -240,8 +240,8 @@ class GameOfLife:
     label_data: tk.Label  # Label of the data
     button_dim: tk.Button  # Button to change the dimensions
     running: bool  # Is the animation running
-    dimh: int = 0
-    dimw: int = 0
+    dim_h: int = 0
+    dim_w: int = 0
     nh: int = 50
     nw: int = 50
 
@@ -331,8 +331,8 @@ class GameOfLife:
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.toggle_cell)
 
-        self.dimh = height
-        self.dimw = width
+        self.dim_h = height
+        self.dim_w = width
 
         # print Count of alive cells
         self.label_count = tk.Label(self.master, text="Count of alive cells : " + str(self.count_alive_cells()))
@@ -343,8 +343,10 @@ class GameOfLife:
         self.label_wait.pack()
 
         # print the wild/height of the interface
-        self.label_data = tk.Label(self.master, text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(
-            self.nh) + "*" + str(self.nw))
+        self.label_data = tk.Label(
+            self.master,
+            text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw)
+        )
         self.label_data.pack()
 
     def init_grid(self) -> None:
@@ -362,7 +364,7 @@ class GameOfLife:
         :return: None
         """
         self.running = True
-        self.master.after(self.dimh)
+        self.master.after(self.dim_h)
         while self.running:
             self.update_count()
             self.master.after(self.Wait_Time)
@@ -512,32 +514,32 @@ class GameOfLife:
         Change the dimension by opening a new window
         :return: None
         """
-        if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
-            Dimensions["Interface"]["Height"] = self.dimh
-            Dimensions["Interface"]["Width"] = self.dimw
+        if Dimensions["Interface"]["Height"] != self.dim_h or Dimensions["Interface"]["Width"] != self.dim_w:
+            Dimensions["Interface"]["Height"] = self.dim_h
+            Dimensions["Interface"]["Width"] = self.dim_w
 
         # Create an instance of Dimensions_Windows
         dimensions_window = DimensionsWindows(lang=self.Language)
         dimensions_window.wait_window()
 
-        if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
+        if Dimensions["Interface"]["Height"] != self.dim_h or Dimensions["Interface"]["Width"] != self.dim_w:
             if Dimensions["Interface"]["Height"] % 10 != 0:
                 # arrondir au multiple de 10 le plus proche
-                self.dimh = int(Dimensions["Interface"]["Height"] / 10) * 10
+                self.dim_h = int(Dimensions["Interface"]["Height"] / 10) * 10
             else:
-                self.dimh = Dimensions["Interface"]["Height"]
+                self.dim_h = Dimensions["Interface"]["Height"]
             if Dimensions["Interface"]["Width"] % 10 != 0:
                 # arrondir au multiple de 10 le plus proche
-                self.dimw = int(Dimensions["Interface"]["Width"] / 10) * 10
+                self.dim_w = int(Dimensions["Interface"]["Width"] / 10) * 10
             else:
-                self.dimw = Dimensions["Interface"]["Width"]
+                self.dim_w = Dimensions["Interface"]["Width"]
 
-            self.nh = int(self.dimh / 10)
-            self.nw = int(self.dimw / 10)
-            self.canvas.config(height=self.dimh, width=self.dimw)
+            self.nh = int(self.dim_h / 10)
+            self.nw = int(self.dim_w / 10)
+            self.canvas.config(height=self.dim_h, width=self.dim_w)
             self.init_grid()
             self.label_data.config(
-                text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(self.nh) + "*" + str(self.nw))
+                text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw))
 
 
 if __name__ == '__main__':
