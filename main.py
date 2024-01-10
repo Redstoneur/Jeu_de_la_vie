@@ -291,30 +291,6 @@ class GameOfLife:
         # Add the wait between generations menu to the menu bar
         menu_bar.add_cascade(label="Wait between generations", menu=wait_between_generations)
 
-        # Create a wait between generations menu
-        dimcontrolh = tk.Menu(menu_bar, tearoff=0)
-        dimcontrolh.add_command(label="+1", command=lambda: self.change_dim("h", "+", 10))
-        dimcontrolh.add_command(label="+10", command=lambda: self.change_dim("h", "+", 100))
-        dimcontrolh.add_command(label="+100", command=lambda: self.change_dim("h", "+", 1000))
-        dimcontrolh.add_command(label="-1", command=lambda: self.change_dim("h", "-", 10))
-        dimcontrolh.add_command(label="-10", command=lambda: self.change_dim("h", "-", 100))
-        dimcontrolh.add_command(label="-100", command=lambda: self.change_dim("h", "-", 1000))
-
-        # add height/wild control
-        menu_bar.add_cascade(label="dim h", menu=dimcontrolh)
-
-        # Create a wait between generations menu
-        dimcontrolw = tk.Menu(menu_bar, tearoff=0)
-        dimcontrolw.add_command(label="+1", command=lambda: self.change_dim("w", "+", 10))
-        dimcontrolw.add_command(label="+10", command=lambda: self.change_dim("w", "+", 100))
-        dimcontrolw.add_command(label="+100", command=lambda: self.change_dim("w", "+", 1000))
-        dimcontrolw.add_command(label="-1", command=lambda: self.change_dim("w", "-", 10))
-        dimcontrolw.add_command(label="-10", command=lambda: self.change_dim("w", "-", 100))
-        dimcontrolw.add_command(label="-100", command=lambda: self.change_dim("w", "-", 1000))
-
-        # add height/wild control
-        menu_bar.add_cascade(label="dim w", menu=dimcontrolw)
-
         # Create a canvas
         self.canvas = tk.Canvas(self.master, width=width, height=height, bg="white", borderwidth=1, relief="groove")
         self.canvas.pack()
@@ -534,49 +510,6 @@ class GameOfLife:
             self.init_grid()
             self.label_data.config(
                 text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(self.nh) + "*" + str(self.nw))
-
-    def change_dim(self, target: str, action: str, length: int) -> None:
-        """
-        Change the dimension of the grid
-        :param target: the target to change
-        :param action: the action to do
-        :param length: the length to add or remove
-        :return: None
-        """
-        if target == "h":
-            out = self.dimh
-            out2 = self.nh
-            if length != -1:
-                if action == "+":
-                    out = self.dimh + length
-                    out2 = int(self.nh + (length / 10))
-                elif action == "-":
-                    out = self.dimh - length
-                    out2 = int(self.nh - (length / 10))
-                else:
-                    out = length
-            self.dimh = out
-            self.nh = out2
-            self.canvas.config(height=self.dimh)
-        if target == "w":
-            out = self.dimw
-            out2 = self.nw
-            if length != -1:
-                if action == "+":
-                    out = self.dimw + length
-                    out2 = int(self.nw + (length / 10))
-                elif action == "-":
-                    out = self.dimw - length
-                    out2 = int(self.nw - (length / 10))
-                else:
-                    out = length
-            self.dimw = out
-            self.nw = out2
-            self.canvas.config(width=self.dimw)
-        self.init_grid()
-        self.label_data.config(
-            text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(self.nh) + "*" + str(self.nw))
-
 
 if __name__ == '__main__':
     # get the language of the system
