@@ -43,6 +43,7 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
             "Random": "Aléatoire"
         },
         "Dim": {
+            "Title": "Dimensions",
             "Height": "Hauteur",
             "Width": "Largeur",
             "Validate": "Valider",
@@ -72,6 +73,7 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
             "Random": "Random"
         },
         "Dim": {
+            "Title": "Dimensions",
             "Height": "Height",
             "Width": "Width",
             "Validate": "Validate",
@@ -113,8 +115,8 @@ class DimensionsWindows(tk.Toplevel):
         Constructor of the class
         """
         super().__init__()
-        self.title("Dimensions")
         self.Language = lang
+        self.title(Dictionary[self.Language.value]["Dim"]["Title"])
         self.create_widgets()
         self.resizable(False, False)
 
