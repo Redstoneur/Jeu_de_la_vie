@@ -617,14 +617,14 @@ class GameOfLife:
         self.Wait_Time = wait
         self.label_wait.config(text="Wait between generations : " + str(self.Wait_Time) + " ms")
 
-    def show(self):
+    def show(self) -> None:
         """
         Show the window
         :return: None
         """
         self.master.mainloop()
 
-    def change_dim_window(self):
+    def change_dim_window(self) -> None:
         """
         Change the dimension by opening a new window
         :return: None
@@ -661,11 +661,23 @@ class GameOfLife:
             self.label_data.config(
                 text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw))
 
-    def change_cursor_enter(self, event):
+    # noinspection PyUnusedLocal
+    def change_cursor_enter(self, event: tk.Event) -> None:
+        """
+        Change the cursor shape
+        @param event: Event
+        @return: None
+        """
         # Changer la forme du pointeur en "cross" lorsque la souris entre dans le canevas
         self.canvas.config(cursor="plus")
 
-    def change_cursor_leave(self, event):
+    # noinspection PyUnusedLocal
+    def change_cursor_leave(self, event: tk.Event) -> None:
+        """
+        Change the cursor shape
+        @param event: Event
+        @return: None
+        """
         # Changer la forme du pointeur en "arrow" lorsque la souris quitte le canevas
         self.canvas.config(cursor="arrow")
 
