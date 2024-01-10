@@ -40,6 +40,15 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
             "Full": "Total",
             "Checkerboard": "Damier",
             "Random": "Aléatoire"
+        },
+        "Dim": {
+            "Height": "Hauteur",
+            "Width": "Largeur",
+            "Validate": "Valider",
+            "Cancel": "Annuler",
+            "Default": "Défaut",
+            "MaxDim": "MaxDim",
+            "change_dim": "Changer les dimensions"
         }
     },
     "en": {
@@ -59,6 +68,15 @@ Dictionary: dict = {  # Dictionary of all the words used in the application
             "Full": "Full",
             "Checkerboard": "Checkerboard",
             "Random": "Random"
+        },
+        "Dim": {
+            "Height": "Height",
+            "Width": "Width",
+            "Validate": "Validate",
+            "Cancel": "Cancel",
+            "Default": "Default",
+            "MaxDim": "MaxDim",
+            "change_dim": "Change the dimensions"
         }
     }
 }
@@ -80,15 +98,17 @@ class Dimensions_Windows(tk.Toplevel):
     Dimensions of the windows
     """
     components_dim: int = 10  # Dimensions of the components
+    Language: Languages  # Language of the application
     text_area_height: tk.Text  # Text area height
     text_area_width: tk.Text  # Text area width
 
-    def __init__(self) -> None:
+    def __init__(self, lang: Languages) -> None:
         """
         Constructor of the class
         """
         super().__init__()
         self.title("Dimensions")
+        self.Language = lang
         self.create_widgets()
         self.resizable(False, False)
 
@@ -101,7 +121,7 @@ class Dimensions_Windows(tk.Toplevel):
         row = 0
         column = 0
 
-        label_1 = tk.Label(self, text="Height", font=("Arial", 10))
+        label_1 = tk.Label(self, text=f"{Dictionary[self.Language.value]['Dim']['Height']}", font=("Arial", 10))
         label_1.grid(
             row=row, column=column, sticky="nsew"
         )
@@ -118,7 +138,7 @@ class Dimensions_Windows(tk.Toplevel):
 
         column += 1
 
-        label_2 = tk.Label(self, text="* Width", font=("Arial", 10))
+        label_2 = tk.Label(self, text=f"* {Dictionary[self.Language.value]['Dim']['Width']}", font=("Arial", 10))
         label_2.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -138,7 +158,7 @@ class Dimensions_Windows(tk.Toplevel):
         row += 1
         column = 0
 
-        Default = tk.Button(self, text="Default", command=self.default)
+        Default = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Default']}", command=self.default)
         Default.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -147,16 +167,25 @@ class Dimensions_Windows(tk.Toplevel):
 
         column += 1
 
-        Validate = tk.Button(self, text="Validate", command=self.validate)
+        MaxDim = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['MaxDim']}", command=self.max_dim)
+        MaxDim.grid(
+            row=row, column=column, sticky="nsew",
+            padx=self.components_dim / 10,
+            pady=self.components_dim / 10
+        )
+
+        column += 1
+
+        Validate = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Validate']}", command=self.validate)
         Validate.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
             pady=self.components_dim / 10
         )
 
-        column += 2
+        column += 1
 
-        Cancel = tk.Button(self, text="Cancel", command=self.cancel)
+        Cancel = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Cancel']}", command=self.cancel)
         Cancel.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -164,10 +193,6 @@ class Dimensions_Windows(tk.Toplevel):
         )
 
     def validate(self) -> None:
-        """
-        Validate the dimensions
-        :return: None
-        """
         try:
             Dimensions["Interface"]["Height"] = int(self.text_area_height.get("1.0", tk.END))
             Dimensions["Interface"]["Width"] = int(self.text_area_width.get("1.0", tk.END))
@@ -189,6 +214,15 @@ class Dimensions_Windows(tk.Toplevel):
         """
         Dimensions["Interface"]["Height"] = Dimensions["Interface_Default"]["Height"]
         Dimensions["Interface"]["Width"] = Dimensions["Interface_Default"]["Width"]
+        self.destroy()
+
+    def max_dim(self) -> None:
+        """
+        Set the max dimensions
+        :return: None
+        """
+        Dimensions["Interface"]["Height"] = self.winfo_screenheight()
+        Dimensions["Interface"]["Width"] = self.winfo_screenwidth()
         self.destroy()
 
 
@@ -240,6 +274,7 @@ class GameOfLife:
         menu_bar.add_command(label=Dictionary[self.Language.value]["init"], command=self.init_grid)
         menu_bar.add_command(label=Dictionary[self.Language.value]["start"], command=self.start_animation)
         menu_bar.add_command(label=Dictionary[self.Language.value]["stop"], command=self.stop_animation)
+        menu_bar.add_command(label=Dictionary[self.Language.value]['Dim']['change_dim'], command=self.change_dim_window)
 
         # Create a Patterns menu
         pattern_menu = tk.Menu(menu_bar, tearoff=0)
@@ -311,10 +346,6 @@ class GameOfLife:
         self.label_data = tk.Label(self.master, text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(
             self.nh) + "*" + str(self.nw))
         self.label_data.pack()
-
-        # Create a button to change the dimensions
-        self.button_dim = tk.Button(self.master, text="Change dimensions", command=self.change_dim_window)
-        self.button_dim.pack()
 
     def init_grid(self) -> None:
         """
@@ -486,11 +517,8 @@ class GameOfLife:
             Dimensions["Interface"]["Width"] = self.dimw
 
         # Create an instance of Dimensions_Windows
-        dimensions_window = Dimensions_Windows()
+        dimensions_window = Dimensions_Windows(lang=self.Language)
         dimensions_window.wait_window()
-
-        print(Dimensions["Interface"]["Height"])
-        print(Dimensions["Interface"]["Width"])
 
         if Dimensions["Interface"]["Height"] != self.dimh or Dimensions["Interface"]["Width"] != self.dimw:
             if Dimensions["Interface"]["Height"] % 10 != 0:
@@ -510,6 +538,7 @@ class GameOfLife:
             self.init_grid()
             self.label_data.config(
                 text="dim: " + str(self.dimh) + "/" + str(self.dimw) + " case: " + str(self.nh) + "*" + str(self.nw))
+
 
 if __name__ == '__main__':
     # get the language of the system
