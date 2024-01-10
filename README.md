@@ -5,7 +5,7 @@ mathématique dans lequel des cellules évoluent selon des règles simples et pr
 
 ## Règles
 
-Le jeu de la vie se déroule sur une grille bidimensionnelle. Chaque cellule peut être soit vivante (1) soit morte (0).
+Le jeu de la vie se déroule sur une grille bidimensionnelle. Chaques cellules peuvent être soit vivante (1) soit morte (0).
 Les cellules évoluent selon les règles suivantes :
 
 1. Si une cellule a exactement trois voisines vivantes, elle devient vivante à la génération suivante.
@@ -14,8 +14,11 @@ Les cellules évoluent selon les règles suivantes :
 
 ## Utilisation
 
-Le jeu de la vie peut être exécuté en utilisant le langage de programmation Python et la bibliothèque Tkinter. Avant de
-l'exécuter, assurez-vous d'avoir installé les dépendances en exécutant la commande suivante :
+Le jeu de la vie peut être exécuté en utilisant le langage de programmation Python et la bibliothèque Tkinter.
+
+La version python minimale requise pour exécuter le programme est la version `3.8.5`.
+
+Avant de l'exécuter, assurez-vous d'avoir installé les dépendances en exécutant la commande suivante :
 
 ```bash
 pip install -r requirements.txt
