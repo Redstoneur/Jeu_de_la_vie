@@ -1,5 +1,12 @@
 # Jeu_de_la_vie
 
+![License](https://img.shields.io/github/license/Redstoneur/Jeu_de_la_vie)
+![Top Language](https://img.shields.io/github/languages/top/Redstoneur/Jeu_de_la_vie)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Redstoneur/Jeu_de_la_vie/build-and-publish.yml)
+![Latest Release](https://img.shields.io/github/v/release/Redstoneur/Jeu_de_la_vie)
+![Release Date](https://img.shields.io/github/release-date/Redstoneur/Jeu_de_la_vie)
+![Last Commit](https://img.shields.io/github/last-commit/Redstoneur/Jeu_de_la_vie)
+
 Le jeu de la vie est un automate cellulaire inventé par John Horton Conway en 1970. Il s'agit d'un jeu de simulation
 mathématique dans lequel des cellules évoluent selon des règles simples et produisent des motifs complexes.
 
