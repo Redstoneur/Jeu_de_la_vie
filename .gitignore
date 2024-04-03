@@ -160,5 +160,5 @@ cython_debug/
 .idea/
 
 
-# Code ignore
-passwords*.txt
+# Code ignores
+# Actually Nothing
