@@ -1,3 +1,7 @@
+"""
+Module to simulate the game of life
+"""
+
 import enum
 import locale
 import random as rd
@@ -129,7 +133,10 @@ class DimensionsWindows(tk.Toplevel):
         row = 0
         column = 0
 
-        label_1 = tk.Label(self, text=f"{Dictionary[self.Language.value]['Dim']['Height']}", font=("Arial", 10))
+        label_1 = tk.Label(
+            self, font=("Arial", 10),
+            text=f"{Dictionary[self.Language.value]['Dim']['Height']}"
+        )
         label_1.grid(
             row=row, column=column, sticky="nsew"
         )
@@ -146,7 +153,10 @@ class DimensionsWindows(tk.Toplevel):
 
         column += 1
 
-        label_2 = tk.Label(self, text=f"* {Dictionary[self.Language.value]['Dim']['Width']}", font=("Arial", 10))
+        label_2 = tk.Label(
+            self, font=("Arial", 10),
+            text=f"* {Dictionary[self.Language.value]['Dim']['Width']}"
+        )
         label_2.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -166,7 +176,10 @@ class DimensionsWindows(tk.Toplevel):
         row += 1
         column = 0
 
-        default = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Default']}", command=self.default)
+        default = tk.Button(
+            self, command=self.default,
+            text=f"{Dictionary[self.Language.value]['Dim']['Default']}"
+        )
         default.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -175,7 +188,10 @@ class DimensionsWindows(tk.Toplevel):
 
         column += 1
 
-        max_dim = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['MaxDim']}", command=self.max_dim)
+        max_dim = tk.Button(
+            self, command=self.max_dim,
+            text=f"{Dictionary[self.Language.value]['Dim']['MaxDim']}"
+        )
         max_dim.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -184,7 +200,10 @@ class DimensionsWindows(tk.Toplevel):
 
         column += 1
 
-        validate = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Validate']}", command=self.validate)
+        validate = tk.Button(
+            self, command=self.validate,
+            text=f"{Dictionary[self.Language.value]['Dim']['Validate']}"
+        )
         validate.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -193,7 +212,10 @@ class DimensionsWindows(tk.Toplevel):
 
         column += 1
 
-        cancel = tk.Button(self, text=f"{Dictionary[self.Language.value]['Dim']['Cancel']}", command=self.cancel)
+        cancel = tk.Button(
+            self, command=self.cancel,
+            text=f"{Dictionary[self.Language.value]['Dim']['Cancel']}"
+        )
         cancel.grid(
             row=row, column=column, sticky="nsew",
             padx=self.components_dim / 10,
@@ -280,9 +302,16 @@ class GameOfLife:
 
         # Add a menu item
         menu_bar.add_command(label=Dictionary[self.Language.value]["init"], command=self.init_grid)
-        menu_bar.add_command(label=Dictionary[self.Language.value]["start"], command=self.start_animation)
-        menu_bar.add_command(label=Dictionary[self.Language.value]["stop"], command=self.stop_animation)
-        menu_bar.add_command(label=Dictionary[self.Language.value]['Dim']['change_dim'], command=self.change_dim_window)
+        menu_bar.add_command(
+            label=Dictionary[self.Language.value]["start"], command=self.start_animation
+        )
+        menu_bar.add_command(
+            label=Dictionary[self.Language.value]["stop"], command=self.stop_animation
+        )
+        menu_bar.add_command(
+            label=Dictionary[self.Language.value]['Dim']['change_dim'],
+            command=self.change_dim_window
+        )
 
         # Create a Patterns menu
         pattern_menu = tk.Menu(menu_bar, tearoff=0)
@@ -295,9 +324,12 @@ class GameOfLife:
         pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider"],
                                  command=lambda: self.select_pattern(
                                      Dictionary[self.Language.value]["patterns"]["Glider"]))
-        pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Glider_Generator"],
-                                 command=lambda: self.select_pattern(
-                                     Dictionary[self.Language.value]["patterns"]["Glider_Generator"]))
+        pattern_menu.add_command(
+            label=Dictionary[self.Language.value]["patterns"]["Glider_Generator"],
+            command=lambda: self.select_pattern(
+                Dictionary[self.Language.value]["patterns"]["Glider_Generator"]
+            )
+        )
         pattern_menu.add_command(label=Dictionary[self.Language.value]["patterns"]["Circle"],
                                  command=lambda: self.select_pattern(
                                      Dictionary[self.Language.value]["patterns"]["Circle"]))
@@ -332,13 +364,18 @@ class GameOfLife:
         wait_between_generations.add_command(label="100 ms", command=lambda: self.select_wait(100))
         wait_between_generations.add_command(label="250 ms", command=lambda: self.select_wait(250))
         wait_between_generations.add_command(label="500 ms", command=lambda: self.select_wait(500))
-        wait_between_generations.add_command(label="1000 ms", command=lambda: self.select_wait(1000))
+        wait_between_generations.add_command(
+            label="1000 ms", command=lambda: self.select_wait(1000)
+        )
 
         # Add the wait between generations menu to the menu bar
         menu_bar.add_cascade(label="Wait between generations", menu=wait_between_generations)
 
         # Create a canvas
-        self.canvas = tk.Canvas(self.master, width=width, height=height, bg="white", borderwidth=1, relief="groove")
+        self.canvas = tk.Canvas(
+            self.master, width=width, height=height,
+            bg="white", borderwidth=1, relief="groove"
+        )
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.toggle_cell)
 
@@ -350,17 +387,22 @@ class GameOfLife:
         self.dim_w = width
 
         # print Count of alive cells
-        self.label_count = tk.Label(self.master, text="Count of alive cells : " + str(self.count_alive_cells()))
+        self.label_count = tk.Label(
+            self.master, text="Count of alive cells : " + str(self.count_alive_cells())
+        )
         self.label_count.pack()
 
         # print time wait between generations
-        self.label_wait = tk.Label(self.master, text="Wait between generations : " + str(self.Wait_Time) + " ms")
+        self.label_wait = tk.Label(
+            self.master, text="Wait between generations : " + str(self.Wait_Time) + " ms"
+        )
         self.label_wait.pack()
 
         # print the wild/height of the interface
         self.label_data = tk.Label(
             self.master,
-            text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw)
+            text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) +
+                 " case: " + str(self.nh) + "*" + str(self.nw)
         )
         self.label_data.pack()
 
@@ -404,8 +446,9 @@ class GameOfLife:
         for i in range(self.nh):
             for j in range(self.nw):
                 # Compter le nombre de voisins vivants
-                nb_neighbors = np.sum(self.grid[max(0, i - 1):min(self.nh, i + 2), max(0, j - 1):min(self.nw, j + 2)]) \
-                               - self.grid[i, j]
+                nb_neighbors = np.sum(
+                    self.grid[max(0, i - 1):min(self.nh, i + 2), max(0, j - 1):min(self.nw, j + 2)]
+                ) - self.grid[i, j]
                 # Appliquer les règles du jeu de la vie
                 if self.grid[i, j] == 1 and nb_neighbors in [2, 3]:
                     new_grid[i, j] = 1
@@ -433,7 +476,10 @@ class GameOfLife:
         for i in range(self.nh):
             for j in range(self.nw):
                 if self.grid[i, j] == 1:
-                    self.canvas.create_rectangle(j * 10, i * 10, j * 10 + 10, i * 10 + 10, fill='black')
+                    self.canvas.create_rectangle(
+                        j * 10, i * 10, j * 10 + 10, i * 10 + 10,
+                        fill='black'
+                    )
 
     def select_pattern(self, pattern: str) -> None:
         """
@@ -629,7 +675,8 @@ class GameOfLife:
         Change the dimension by opening a new window
         :return: None
         """
-        if Dimensions["Interface"]["Height"] != self.dim_h or Dimensions["Interface"]["Width"] != self.dim_w:
+        if (Dimensions["Interface"]["Height"] != self.dim_h or
+                Dimensions["Interface"]["Width"] != self.dim_w):
             Dimensions["Interface"]["Height"] = self.dim_h
             Dimensions["Interface"]["Width"] = self.dim_w
 
@@ -637,7 +684,8 @@ class GameOfLife:
         dimensions_window = DimensionsWindows(lang=self.Language)
         dimensions_window.wait_window()
 
-        if Dimensions["Interface"]["Height"] != self.dim_h or Dimensions["Interface"]["Width"] != self.dim_w:
+        if (Dimensions["Interface"]["Height"] != self.dim_h or
+                Dimensions["Interface"]["Width"] != self.dim_w):
             if Dimensions["Interface"]["Height"] < Dimensions["Interface_Min"]["Height"]:
                 Dimensions["Interface"]["Height"] = Dimensions["Interface_Min"]["Height"]
             if Dimensions["Interface"]["Width"] < Dimensions["Interface_Min"]["Width"]:
@@ -659,7 +707,8 @@ class GameOfLife:
             self.canvas.config(height=self.dim_h, width=self.dim_w)
             self.init_grid()
             self.label_data.config(
-                text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) + " case: " + str(self.nh) + "*" + str(self.nw))
+                text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) +
+                     " case: " + str(self.nh) + "*" + str(self.nw))
 
     # noinspection PyUnusedLocal
     def change_cursor_enter(self, event: tk.Event) -> None:
