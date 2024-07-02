@@ -598,7 +598,6 @@ class GameOfLife:
 
             li = 3 + mage
             self.grid[li:li + 2, col] = 1
-
         elif pattern == Dictionary[self.language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
             self.grid[::2, ::2] = 1
