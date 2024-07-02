@@ -493,146 +493,34 @@ class GameOfLife:
         self.init_grid()
         if pattern == Dictionary[self.language.value]["patterns"]["Blinker"]:
             # Blinker
-            init: int = 1
-            if secrets.randbelow(2) == 0:
-                self.grid[init:init + 3, init] = 1
-            else:
-                self.grid[init, init:init + 3] = 1
+            self.pattern_blinker()
         elif pattern == Dictionary[self.language.value]["patterns"]["Glider"]:
-            # Glider in the upper right corner that moves down
-            self.grid[0, 1] = 1
-            self.grid[1, 2] = 1
-            self.grid[2, 0:3] = 1
+            # Glider
+            self.pattern_glider()
         elif pattern == Dictionary[self.language.value]["patterns"]["Glider_Generator"]:
             # Glider generator
-            mage: int = 1
-
-            col: int = 1
-
-            li: int = 5 + mage
-            self.grid[li:li + 2, col] = 1
-
-            col += 1
-
-            li = 5 + mage
-            self.grid[li:li + 2, col] = 1
-
-            col += 9
-
-            li = 5 + mage
-            self.grid[li:li + 3, col] = 1
-
-            col += 1
-
-            li = 4 + mage
-            self.grid[li, col] = 1
-            li += 4
-            self.grid[li, col] = 1
-
-            col += 1
-
-            li = 3 + mage
-            self.grid[li, col] = 1
-            li += 6
-            self.grid[li, col] = 1
-
-            col += 1
-
-            li = 3 + mage
-            self.grid[li, col] = 1
-            li += 6
-            self.grid[li, col] = 1
-
-            col += 1
-
-            li = 6 + mage
-            self.grid[li, col] = 1
-
-            col += 1
-
-            li = 4 + mage
-            self.grid[li, col] = 1
-            li += 4
-            self.grid[li, col] = 1
-
-            col += 1
-
-            li = 5 + mage
-            self.grid[li:li + 3, col] = 1
-
-            col += 1
-
-            li = 6 + mage
-            self.grid[li, col] = 1
-
-            col += 3
-
-            li = 3 + mage
-            self.grid[li:li + 3, col] = 1
-
-            col += 1
-
-            li = 3 + mage
-            self.grid[li:li + 3, col] = 1
-
-            col += 1
-
-            li = 2 + mage
-            self.grid[li, col] = 1
-            li += 4
-            self.grid[li, col] = 1
-
-            col += 2
-
-            li = 1 + mage
-            self.grid[li:li + 2, col] = 1
-            li += 5
-            self.grid[li:li + 2, col] = 1
-
-            col += 10
-
-            li = 3 + mage
-            self.grid[li:li + 2, col] = 1
-
-            col += 1
-
-            li = 3 + mage
-            self.grid[li:li + 2, col] = 1
+            self.pattern_glider_generator()
         elif pattern == Dictionary[self.language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
-            self.grid[::2, ::2] = 1
-            self.grid[1::2, 1::2] = 1
+            self.pattern_Checkerboard()
         elif pattern == Dictionary[self.language.value]["patterns"]["Random"]:
             # Random
-            self.grid = np.random.randint(0, 2, (self.nh, self.nw))
+            self.pattern_Random()
         elif pattern == Dictionary[self.language.value]["patterns"]["Circle"]:
             # Circle
-            self.grid = np.zeros((self.nh, self.nw), dtype=int)
-            radius = min(self.nh, self.nw) // 4
-            center_i, center_j = self.nh // 2, self.nw // 2
-
-            for i in range(self.nh):
-                for j in range(self.nw):
-                    if (i - center_i) ** 2 + (j - center_j) ** 2 < radius ** 2:
-                        self.grid[i, j] = 1
+            self.pattern_circle()
         elif pattern == Dictionary[self.language.value]["patterns"]["Horizontal"]:
             # Horizontal
-            self.grid = np.zeros((self.nh, self.nw), dtype=int)
-            self.grid[0, :] = 1
+            self.pattern_horizontal()
         elif pattern == Dictionary[self.language.value]["patterns"]["Vertical"]:
             # Vertical
-            self.grid = np.zeros((self.nh, self.nw), dtype=int)
-            self.grid[:, 0] = 1
+            self.pattern_vertical()
         elif pattern == Dictionary[self.language.value]["patterns"]["square"]:
             # Diagonal from top left to bottom right corner to bottom left to top right corner
-            self.grid = np.zeros((self.nh, self.nw), dtype=int)
-            self.grid[0, :] = 1
-            self.grid[:, 0] = 1
-            self.grid[:, -1] = 1
-            self.grid[-1, :] = 1
+            self.pattern_square()
         elif pattern == Dictionary[self.language.value]["patterns"]["Full"]:
             # Full cells
-            self.grid = np.ones((self.nh, self.nw), dtype=int)
+            self.pattern_full()
         elif pattern == Dictionary[self.language.value]["patterns"]["None"]:
             # None
             pass
@@ -641,6 +529,180 @@ class GameOfLife:
             pass
         self.draw_grid()
         self.update_count()
+
+    def pattern_blinker(self):
+        """
+        Pattern Blinker
+        """
+        init: int = 1
+        if secrets.randbelow(2) == 0:
+            self.grid[init:init + 3, init] = 1
+        else:
+            self.grid[init, init:init + 3] = 1
+
+    def pattern_glider(self):
+        """
+        Pattern Glider in the upper right corner that moves down
+        """
+        init: int = 1
+        self.grid[init, init + 1] = 1
+        self.grid[init + 1, init + 2] = 1
+        self.grid[init + 2, init:init + 3] = 1
+
+    def pattern_glider_generator(self):
+        """
+        Pattern Glider Generator
+        """
+        mage: int = 1
+
+        col: int = 1
+
+        li: int = 5 + mage
+        self.grid[li:li + 2, col] = 1
+
+        col += 1
+
+        li = 5 + mage
+        self.grid[li:li + 2, col] = 1
+
+        col += 9
+
+        li = 5 + mage
+        self.grid[li:li + 3, col] = 1
+
+        col += 1
+
+        li = 4 + mage
+        self.grid[li, col] = 1
+        li += 4
+        self.grid[li, col] = 1
+
+        col += 1
+
+        li = 3 + mage
+        self.grid[li, col] = 1
+        li += 6
+        self.grid[li, col] = 1
+
+        col += 1
+
+        li = 3 + mage
+        self.grid[li, col] = 1
+        li += 6
+        self.grid[li, col] = 1
+
+        col += 1
+
+        li = 6 + mage
+        self.grid[li, col] = 1
+
+        col += 1
+
+        li = 4 + mage
+        self.grid[li, col] = 1
+        li += 4
+        self.grid[li, col] = 1
+
+        col += 1
+
+        li = 5 + mage
+        self.grid[li:li + 3, col] = 1
+
+        col += 1
+
+        li = 6 + mage
+        self.grid[li, col] = 1
+
+        col += 3
+
+        li = 3 + mage
+        self.grid[li:li + 3, col] = 1
+
+        col += 1
+
+        li = 3 + mage
+        self.grid[li:li + 3, col] = 1
+
+        col += 1
+
+        li = 2 + mage
+        self.grid[li, col] = 1
+        li += 4
+        self.grid[li, col] = 1
+
+        col += 2
+
+        li = 1 + mage
+        self.grid[li:li + 2, col] = 1
+        li += 5
+        self.grid[li:li + 2, col] = 1
+
+        col += 10
+
+        li = 3 + mage
+        self.grid[li:li + 2, col] = 1
+
+        col += 1
+
+        li = 3 + mage
+        self.grid[li:li + 2, col] = 1
+
+    def pattern_Checkerboard(self):
+        """
+        Pattern Checkerboard
+        """
+        self.grid[::2, ::2] = 1
+        self.grid[1::2, 1::2] = 1
+
+    def pattern_Random(self):
+        """
+        Pattern Random
+        """
+        self.grid = np.random.randint(0, 2, (self.nh, self.nw))
+
+    def pattern_circle(self):
+        """
+        Pattern Circle
+        """
+        self.grid = np.zeros((self.nh, self.nw), dtype=int)
+        radius = min(self.nh, self.nw) // 4
+        center_i, center_j = self.nh // 2, self.nw // 2
+
+        for i in range(self.nh):
+            for j in range(self.nw):
+                if (i - center_i) ** 2 + (j - center_j) ** 2 < radius ** 2:
+                    self.grid[i, j] = 1
+
+    def pattern_horizontal(self):
+        """
+        Pattern Horizontal
+        """
+        self.grid = np.zeros((self.nh, self.nw), dtype=int)
+        self.grid[0, :] = 1
+
+    def pattern_vertical(self):
+        """
+        Pattern Vertical
+        """
+        self.grid = np.zeros((self.nh, self.nw), dtype=int)
+        self.grid[:, 0] = 1
+
+    def pattern_square(self):
+        """
+        Pattern Square
+        """
+        self.grid = np.zeros((self.nh, self.nw), dtype=int)
+        self.grid[0, :] = 1
+        self.grid[:, 0] = 1
+        self.grid[:, -1] = 1
+        self.grid[-1, :] = 1
+
+    def pattern_full(self):
+        """
+        Pattern Full
+        """
+        self.grid = np.ones((self.nh, self.nw), dtype=int)
+
 
     def count_alive_cells(self) -> int:
         """
