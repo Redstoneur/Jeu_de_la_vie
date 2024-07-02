@@ -4,7 +4,7 @@ Module to simulate the game of life
 
 import enum
 import locale
-import random as rd
+import secrets
 import tkinter as tk
 
 import numpy as np
@@ -494,7 +494,7 @@ class GameOfLife:
         if pattern == Dictionary[self.language.value]["patterns"]["Blinker"]:
             # Blinker
             init: int = 1
-            if rd.randint(0, 1) == 0:
+            if secrets.randbelow(2) == 0:
                 self.grid[init:init + 3, init] = 1
             else:
                 self.grid[init, init:init + 3] = 1
