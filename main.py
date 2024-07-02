@@ -502,10 +502,10 @@ class GameOfLife:
             self.pattern_glider_generator()
         elif pattern == Dictionary[self.language.value]["patterns"]["Checkerboard"]:
             # Checkerboard
-            self.pattern_Checkerboard()
+            self.pattern_checkerboard()
         elif pattern == Dictionary[self.language.value]["patterns"]["Random"]:
             # Random
-            self.pattern_Random()
+            self.pattern_random()
         elif pattern == Dictionary[self.language.value]["patterns"]["Circle"]:
             # Circle
             self.pattern_circle()
@@ -647,14 +647,14 @@ class GameOfLife:
         li = 3 + mage
         self.grid[li:li + 2, col] = 1
 
-    def pattern_Checkerboard(self):
+    def pattern_checkerboard(self):
         """
         Pattern Checkerboard
         """
         self.grid[::2, ::2] = 1
         self.grid[1::2, 1::2] = 1
 
-    def pattern_Random(self):
+    def pattern_random(self):
         """
         Pattern Random
         """
@@ -702,7 +702,6 @@ class GameOfLife:
         Pattern Full
         """
         self.grid = np.ones((self.nh, self.nw), dtype=int)
-
 
     def count_alive_cells(self) -> int:
         """
