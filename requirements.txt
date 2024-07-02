@@ -1,5 +1,1 @@
-tkinter
-numpy
-locale
-enum
-random
+numpy~=1.24.4
