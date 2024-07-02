@@ -1,19 +1,37 @@
 # Jeu_de_la_vie
 
+---
+
 ![License](https://img.shields.io/github/license/Redstoneur/Jeu_de_la_vie)
 ![Top Language](https://img.shields.io/github/languages/top/Redstoneur/Jeu_de_la_vie)
-![Build Status](https://img.shields.io/github/actions/workflow/status/Redstoneur/Jeu_de_la_vie/build-and-publish.yml)
+![Python Version](https://img.shields.io/badge/python-3.8-blue)
+![Size](https://img.shields.io/github/repo-size/Redstoneur/Jeu_de_la_vie)
+![Contributors](https://img.shields.io/github/contributors/Redstoneur/Jeu_de_la_vie)
+![Last Commit](https://img.shields.io/github/last-commit/Redstoneur/Jeu_de_la_vie)
+![Issues](https://img.shields.io/github/issues/Redstoneur/Jeu_de_la_vie)
+![Pull Requests](https://img.shields.io/github/issues-pr/Redstoneur/Jeu_de_la_vie)
+
+---
+
+![Forks](https://img.shields.io/github/forks/Redstoneur/Jeu_de_la_vie)
+![Stars](https://img.shields.io/github/stars/Redstoneur/Jeu_de_la_vie)
+![Watchers](https://img.shields.io/github/watchers/Redstoneur/Jeu_de_la_vie)
+
+---
+
 ![Latest Release](https://img.shields.io/github/v/release/Redstoneur/Jeu_de_la_vie)
 ![Release Date](https://img.shields.io/github/release-date/Redstoneur/Jeu_de_la_vie)
-![Last Commit](https://img.shields.io/github/last-commit/Redstoneur/Jeu_de_la_vie)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Redstoneur/Jeu_de_la_vie/pylint.yml)
+
+---
 
 Le jeu de la vie est un automate cellulaire inventé par John Horton Conway en 1970. Il s'agit d'un jeu de simulation
 mathématique dans lequel des cellules évoluent selon des règles simples et produisent des motifs complexes.
 
 ## Règles
 
-Le jeu de la vie se déroule sur une grille bidimensionnelle. Chaques cellules peuvent être soit vivante (1) soit morte (0).
-Les cellules évoluent selon les règles suivantes :
+Le jeu de la vie se déroule sur une grille bidimensionnelle. Chaques cellules peuvent être soit vivante (1) soit morte
+(0). Les cellules évoluent selon les règles suivantes :
 
 1. Si une cellule a exactement trois voisines vivantes, elle devient vivante à la génération suivante.
 2. Si une cellule a exactement deux voisines vivantes, elle conserve son état à la génération suivante.
