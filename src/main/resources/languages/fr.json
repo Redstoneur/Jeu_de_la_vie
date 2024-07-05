@@ -1,0 +1,29 @@
+{
+  "title": "Jeu de la vie",
+  "init": "Réinitialiser",
+  "start": "Démarrer",
+  "stop": "Arrêter",
+  "patterns": {
+    "None": "Aucun",
+    "Blinker": "Clignotant",
+    "Glider": "Planeur",
+    "Glider_Generator": "Générateur de planeurs",
+    "Circle": "Cercle",
+    "Vertical": "Vertical",
+    "Horizontal": "Horizontal",
+    "square": "Carré",
+    "Full": "Total",
+    "Checkerboard": "Damier",
+    "Random": "Aléatoire"
+  },
+  "Dim": {
+    "Title": "Dimensions",
+    "Height": "Hauteur",
+    "Width": "Largeur",
+    "Validate": "Valider",
+    "Cancel": "Annuler",
+    "Default": "Défaut",
+    "MaxDim": "MaxDim",
+    "change_dim": "Changer les dimensions"
+  }
+}
