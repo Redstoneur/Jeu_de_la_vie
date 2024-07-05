@@ -21,7 +21,7 @@
 
 ![Latest Release](https://img.shields.io/github/v/release/Redstoneur/Jeu_de_la_vie)
 ![Release Date](https://img.shields.io/github/release-date/Redstoneur/Jeu_de_la_vie)
-![Build Status](https://img.shields.io/github/actions/workflow/status/Redstoneur/Jeu_de_la_vie/pylint.yml)
+![Build Status](https://github.com/Redstoneur/Jeu_de_la_vie/actions/workflows/pylint.yml/badge.svg)
 
 ---
 
