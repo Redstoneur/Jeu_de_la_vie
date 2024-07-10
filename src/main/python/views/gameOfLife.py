@@ -1,278 +1,34 @@
-"""
-Module to simulate the game of life
-"""
+##############################################################################################
+### Import ###################################################################################
+##############################################################################################
 
-import enum
-import locale
 import secrets
-import tkinter as tk
+from tkinter import Tk, Menu, Canvas, Label, Button, ALL, Event
 
 import numpy as np
 
-
-class Languages(enum.Enum):
-    """
-    Languages of the application
-    """
-    FR = "fr"  # French
-    EN = "en"  # English
-
-    def __str__(self) -> str:
-        """
-        Return the language name
-        :return: The language name
-        """
-        return self.value
+from src.main.python.models.languages import Languages
+from src.main.python.utiles import Dimensions
+from src.main.python.views import DimensionsWindows
 
 
-Language_Appli: Languages = Languages.FR  # Default language
-
-Dictionary: dict = {  # Dictionary of all the words used in the application
-    "fr": {
-        "title": "Jeu de la vie",
-        "init": "Réinitialiser",
-        "start": "Démarrer",
-        "stop": "Arrêter",
-        "patterns": {
-            "None": "Aucun",
-            "Blinker": "Clignotant",
-            "Glider": "Planeur",
-            "Glider_Generator": "Générateur de planeurs",
-            "Circle": "Cercle",
-            "Vertical": "Vertical",
-            "Horizontal": "Horizontal",
-            "square": "Carré",
-            "Full": "Total",
-            "Checkerboard": "Damier",
-            "Random": "Aléatoire"
-        },
-        "Dim": {
-            "Title": "Dimensions",
-            "Height": "Hauteur",
-            "Width": "Largeur",
-            "Validate": "Valider",
-            "Cancel": "Annuler",
-            "Default": "Défaut",
-            "MaxDim": "MaxDim",
-            "change_dim": "Changer les dimensions"
-        }
-    },
-    "en": {
-        "title": "Game of Life",
-        "init": "Reset",
-        "start": "Start",
-        "stop": "Stop",
-        "pattern": "None",
-        "patterns": {
-            "None": "None",
-            "Blinker": "Blinker",
-            "Glider": "Glider",
-            "Glider_Generator": "Glider generator",
-            "Circle": "Circle",
-            "Vertical": "Vertical",
-            "Horizontal": "Horizontal",
-            "square": "Square",
-            "Full": "Full",
-            "Checkerboard": "Checkerboard",
-            "Random": "Random"
-        },
-        "Dim": {
-            "Title": "Dimensions",
-            "Height": "Height",
-            "Width": "Width",
-            "Validate": "Validate",
-            "Cancel": "Cancel",
-            "Default": "Default",
-            "MaxDim": "MaxDim",
-            "change_dim": "Change the dimensions"
-        }
-    }
-}
-
-Dimensions: dict = {
-    "Interface": {
-        "Height": 500,
-        "Width": 500
-    },
-    "Interface_Default": {
-        "Height": 500,
-        "Width": 500
-    },
-    "Interface_Min": {
-        "Height": 160,
-        "Width": 370
-    },
-}
-
-
-class DimensionsWindows(tk.Toplevel):
-    """
-    Dimensions of the windows
-    """
-    components_dim: int = 10  # Dimensions of the components
-    language: Languages  # Language of the application
-    text_area_height: tk.Text  # Text area height
-    text_area_width: tk.Text  # Text area width
-
-    def __init__(self, lang: Languages) -> None:
-        """
-        Constructor of the class
-        """
-        super().__init__()
-        self.language = lang
-        self.title(Dictionary[self.language.value]["Dim"]["Title"])
-        self.create_widgets()
-        self.resizable(False, False)
-
-    def create_widgets(self) -> None:
-        """
-        Create the widgets of the application
-        :return: None
-        """
-
-        row = 0
-        column = 0
-
-        label_1 = tk.Label(
-            self, font=("Arial", 10),
-            text=f"{Dictionary[self.language.value]['Dim']['Height']}"
-        )
-        label_1.grid(
-            row=row, column=column, sticky="nsew"
-        )
-
-        column += 1
-
-        self.text_area_height = tk.Text(self, height=1, width=1)
-        self.text_area_height.insert(tk.END, Dimensions["Interface"]["Height"])
-        self.text_area_height.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        column += 1
-
-        label_2 = tk.Label(
-            self, font=("Arial", 10),
-            text=f"* {Dictionary[self.language.value]['Dim']['Width']}"
-        )
-        label_2.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        column += 1
-
-        self.text_area_width = tk.Text(self, height=1, width=1)
-        self.text_area_width.insert(tk.END, Dimensions["Interface"]["Width"])
-        self.text_area_width.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        row += 1
-        column = 0
-
-        default = tk.Button(
-            self, command=self.default,
-            text=f"{Dictionary[self.language.value]['Dim']['Default']}"
-        )
-        default.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        column += 1
-
-        max_dim = tk.Button(
-            self, command=self.max_dim,
-            text=f"{Dictionary[self.language.value]['Dim']['MaxDim']}"
-        )
-        max_dim.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        column += 1
-
-        validate = tk.Button(
-            self, command=self.validate,
-            text=f"{Dictionary[self.language.value]['Dim']['Validate']}"
-        )
-        validate.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-        column += 1
-
-        cancel = tk.Button(
-            self, command=self.cancel,
-            text=f"{Dictionary[self.language.value]['Dim']['Cancel']}"
-        )
-        cancel.grid(
-            row=row, column=column, sticky="nsew",
-            padx=self.components_dim / 10,
-            pady=self.components_dim / 10
-        )
-
-    def validate(self) -> None:
-        """
-        Validate the dimensions
-        :return: None
-        """
-        try:
-            Dimensions["Interface"]["Height"] = int(self.text_area_height.get("1.0", tk.END))
-            Dimensions["Interface"]["Width"] = int(self.text_area_width.get("1.0", tk.END))
-        except ValueError:
-            pass
-        self.destroy()
-
-    def cancel(self) -> None:
-        """
-        Cancel the dimensions
-        :return: None
-        """
-        self.destroy()
-
-    def default(self) -> None:
-        """
-        Set the default dimensions
-        :return: None
-        """
-        Dimensions["Interface"]["Height"] = Dimensions["Interface_Default"]["Height"]
-        Dimensions["Interface"]["Width"] = Dimensions["Interface_Default"]["Width"]
-        self.destroy()
-
-    def max_dim(self) -> None:
-        """
-        Set the max dimensions
-        :return: None
-        """
-        Dimensions["Interface"]["Height"] = self.winfo_screenheight()
-        Dimensions["Interface"]["Width"] = self.winfo_screenwidth()
-        self.destroy()
-
+##############################################################################################
+### Class ####################################################################################
+##############################################################################################
 
 class GameOfLife:
     """
     Game of life class
     """
     wait_time: int = 0  # Time between each generation
-    language: Languages  # Language of the application
-    master: tk.Tk  # Main window
+    language: Languages  # language of the application
+    master: Tk  # Main window
     grid: np.ndarray  # Grid of the game
-    canvas: tk.Canvas  # Canvas of the grid
-    label_wait: tk.Label  # Label of the wait time
-    label_count: tk.Label  # Label of the generation count
-    label_data: tk.Label  # Label of the data
-    button_dim: tk.Button  # Button to change the dimensions
+    canvas: Canvas  # Canvas of the grid
+    label_wait: Label  # Label of the wait time
+    label_count: Label  # Label of the generation count
+    label_data: Label  # Label of the data
+    button_dim: Button  # Button to change the dimensions
     running: bool  # Is the animation running
     dim_h: int = 0
     dim_w: int = 0
@@ -286,8 +42,8 @@ class GameOfLife:
         """
 
         self.language = lang
-        self.master = tk.Tk()
-        self.master.title(Dictionary[self.language.value]["title"])
+        self.master = Tk()
+        self.master.title(self.language.get_dictionary()["title"])
 
         self.grid = np.zeros((self.nh, self.nw), dtype=int)
         self.create_widgets(width=500, height=500)
@@ -300,66 +56,66 @@ class GameOfLife:
         :return: None
         """
         # Create a menu bar
-        menu_bar = tk.Menu(self.master)
+        menu_bar = Menu(self.master)
         self.master.config(menu=menu_bar)
 
         # Add a menu item
-        menu_bar.add_command(label=Dictionary[self.language.value]["init"], command=self.init_grid)
+        menu_bar.add_command(label=self.language.get_dictionary()["init"], command=self.init_grid)
         menu_bar.add_command(
-            label=Dictionary[self.language.value]["start"], command=self.start_animation
+            label=self.language.get_dictionary()["start"], command=self.start_animation
         )
         menu_bar.add_command(
-            label=Dictionary[self.language.value]["stop"], command=self.stop_animation
+            label=self.language.get_dictionary()["stop"], command=self.stop_animation
         )
         menu_bar.add_command(
-            label=Dictionary[self.language.value]['Dim']['change_dim'],
+            label=self.language.get_dictionary()['Dim']['change_dim'],
             command=self.change_dim_window
         )
 
         # Create a Patterns menu
-        pattern_menu = tk.Menu(menu_bar, tearoff=0)
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["None"],
+        pattern_menu = Menu(menu_bar, tearoff=0)
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["None"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["None"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Blinker"],
+                                     self.language.get_dictionary()["patterns"]["None"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Blinker"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Blinker"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Glider"],
+                                     self.language.get_dictionary()["patterns"]["Blinker"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Glider"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Glider"]))
+                                     self.language.get_dictionary()["patterns"]["Glider"]))
         pattern_menu.add_command(
-            label=Dictionary[self.language.value]["patterns"]["Glider_Generator"],
+            label=self.language.get_dictionary()["patterns"]["Glider_Generator"],
             command=lambda: self.select_pattern(
-                Dictionary[self.language.value]["patterns"]["Glider_Generator"]
+                self.language.get_dictionary()["patterns"]["Glider_Generator"]
             )
         )
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Circle"],
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Circle"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Circle"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Vertical"],
+                                     self.language.get_dictionary()["patterns"]["Circle"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Vertical"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Vertical"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Horizontal"],
+                                     self.language.get_dictionary()["patterns"]["Vertical"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Horizontal"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Horizontal"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["square"],
+                                     self.language.get_dictionary()["patterns"]["Horizontal"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["square"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["square"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Full"],
+                                     self.language.get_dictionary()["patterns"]["square"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Full"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Full"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Checkerboard"],
+                                     self.language.get_dictionary()["patterns"]["Full"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Checkerboard"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Checkerboard"]))
-        pattern_menu.add_command(label=Dictionary[self.language.value]["patterns"]["Random"],
+                                     self.language.get_dictionary()["patterns"]["Checkerboard"]))
+        pattern_menu.add_command(label=self.language.get_dictionary()["patterns"]["Random"],
                                  command=lambda: self.select_pattern(
-                                     Dictionary[self.language.value]["patterns"]["Random"]))
+                                     self.language.get_dictionary()["patterns"]["Random"]))
 
         # Add the Patterns menu to the menu bar
         menu_bar.add_cascade(label="Patterns", menu=pattern_menu)
 
         # Create a wait between generations menu
-        wait_between_generations = tk.Menu(menu_bar, tearoff=0)
+        wait_between_generations = Menu(menu_bar, tearoff=0)
         wait_between_generations.add_command(label="0 ms", command=lambda: self.select_wait(0))
         wait_between_generations.add_command(label="10 ms", command=lambda: self.select_wait(10))
         wait_between_generations.add_command(label="25 ms", command=lambda: self.select_wait(25))
@@ -375,7 +131,7 @@ class GameOfLife:
         menu_bar.add_cascade(label="Wait between generations", menu=wait_between_generations)
 
         # Create a canvas
-        self.canvas = tk.Canvas(
+        self.canvas = Canvas(
             self.master, width=width, height=height,
             bg="white", borderwidth=1, relief="groove"
         )
@@ -390,19 +146,19 @@ class GameOfLife:
         self.dim_w = width
 
         # print Count of alive cells
-        self.label_count = tk.Label(
+        self.label_count = Label(
             self.master, text="Count of alive cells : " + str(self.count_alive_cells())
         )
         self.label_count.pack()
 
         # print time wait between generations
-        self.label_wait = tk.Label(
+        self.label_wait = Label(
             self.master, text="Wait between generations : " + str(self.wait_time) + " ms"
         )
         self.label_wait.pack()
 
         # print the wild/height of the interface
-        self.label_data = tk.Label(
+        self.label_data = Label(
             self.master,
             text="dim: " + str(self.dim_h) + "/" + str(self.dim_w) +
                  " case: " + str(self.nh) + "*" + str(self.nw)
@@ -459,7 +215,7 @@ class GameOfLife:
                     new_grid[i, j] = 1
         self.grid = new_grid
 
-    def toggle_cell(self, event: tk.Event) -> None:
+    def toggle_cell(self, event: Event) -> None:
         """
         Toggle the state of a cell
         :param event: Event
@@ -475,7 +231,7 @@ class GameOfLife:
         Draw the grid
         :return: None
         """
-        self.canvas.delete(tk.ALL)
+        self.canvas.delete(ALL)
         for i in range(self.nh):
             for j in range(self.nw):
                 if self.grid[i, j] == 1:
@@ -491,37 +247,37 @@ class GameOfLife:
         :return: None
         """
         self.init_grid()
-        if pattern == Dictionary[self.language.value]["patterns"]["Blinker"]:
+        if pattern == self.language.get_dictionary()["patterns"]["Blinker"]:
             # Blinker
             self.pattern_blinker()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Glider"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Glider"]:
             # Glider
             self.pattern_glider()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Glider_Generator"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Glider_Generator"]:
             # Glider generator
             self.pattern_glider_generator()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Checkerboard"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Checkerboard"]:
             # Checkerboard
             self.pattern_checkerboard()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Random"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Random"]:
             # Random
             self.pattern_random()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Circle"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Circle"]:
             # Circle
             self.pattern_circle()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Horizontal"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Horizontal"]:
             # Horizontal
             self.pattern_horizontal()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Vertical"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Vertical"]:
             # Vertical
             self.pattern_vertical()
-        elif pattern == Dictionary[self.language.value]["patterns"]["square"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["square"]:
             # Diagonal from top left to bottom right corner to bottom left to top right corner
             self.pattern_square()
-        elif pattern == Dictionary[self.language.value]["patterns"]["Full"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["Full"]:
             # Full cells
             self.pattern_full()
-        elif pattern == Dictionary[self.language.value]["patterns"]["None"]:
+        elif pattern == self.language.get_dictionary()["patterns"]["None"]:
             # None
             pass
         else:
@@ -774,7 +530,7 @@ class GameOfLife:
                      " case: " + str(self.nh) + "*" + str(self.nw))
 
     # noinspection PyUnusedLocal
-    def change_cursor_enter(self, event: tk.Event) -> None:
+    def change_cursor_enter(self, event: Event) -> None:
         """
         Change the cursor shape
         @param event: Event
@@ -785,7 +541,7 @@ class GameOfLife:
         self.canvas.config(cursor="plus")
 
     # noinspection PyUnusedLocal
-    def change_cursor_leave(self, event: tk.Event) -> None:
+    def change_cursor_leave(self, event: Event) -> None:
         """
         Change the cursor shape
         @param event: Event
@@ -795,13 +551,6 @@ class GameOfLife:
         event.widget.config(cursor="arrow")
         self.canvas.config(cursor="arrow")
 
-
-if __name__ == '__main__':
-    # get the language of the system
-    if locale.getdefaultlocale()[0] in ["fr_FR", "fr_BE", "fr_CA", "fr_CH", "fr_LU"]:
-        Language_Appli = Languages.FR
-    else:
-        Language_Appli = Languages.EN
-
-    game = GameOfLife(Language_Appli)
-    game.show()
+##############################################################################################
+### End : src/main/python/views/dimensionsWindows.py ##########################################
+##############################################################################################

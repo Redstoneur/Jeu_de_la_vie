@@ -1,0 +1,14 @@
+{
+    "Interface": {
+        "Height": 500,
+        "Width": 500
+    },
+    "Interface_Default": {
+        "Height": 500,
+        "Width": 500
+    },
+    "Interface_Min": {
+        "Height": 160,
+        "Width": 370
+    }
+}

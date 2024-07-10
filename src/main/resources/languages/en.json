@@ -1,0 +1,30 @@
+{
+  "title": "Game of Life",
+  "init": "Reset",
+  "start": "Start",
+  "stop": "Stop",
+  "pattern": "None",
+  "patterns": {
+    "None": "None",
+    "Blinker": "Blinker",
+    "Glider": "Glider",
+    "Glider_Generator": "Glider generator",
+    "Circle": "Circle",
+    "Vertical": "Vertical",
+    "Horizontal": "Horizontal",
+    "square": "Square",
+    "Full": "Full",
+    "Checkerboard": "Checkerboard",
+    "Random": "Random"
+  },
+  "Dim": {
+    "Title": "Dimensions",
+    "Height": "Height",
+    "Width": "Width",
+    "Validate": "Validate",
+    "Cancel": "Cancel",
+    "Default": "Default",
+    "MaxDim": "MaxDim",
+    "change_dim": "Change the dimensions"
+  }
+}
