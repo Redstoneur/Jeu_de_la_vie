@@ -4,6 +4,9 @@
 
 import os
 
+## récupérer le répertoire courant du fichier main.py sans os.get
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 if __name__ == "__main__" and os.path.basename(os.getcwd()) == "python":
     # Attempt to change the working directory to 'src/main/'
     # Adjust the path as necessary based on the actual structure

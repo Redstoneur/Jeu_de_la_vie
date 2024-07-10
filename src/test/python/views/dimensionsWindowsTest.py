@@ -4,6 +4,9 @@
 
 import os
 
+if os.getcwd()!= os.path.dirname(os.path.abspath(__file__)):
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 # Change the working directory to 'src/main/' if the current working directory ends with 'test\\python'
 if os.getcwd().endswith("test\\python"):
     # Attempt to change the working directory to 'src/main/'
