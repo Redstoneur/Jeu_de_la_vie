@@ -1,4 +1,4 @@
-name: Code_Quality_and_Tests
+name: Pylint
 
 on:
   push:
@@ -15,27 +15,25 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.8'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pylint
+
       - name: Analysing the code with pylint
         run: |
           pylint --rcfile=.pylintrc **/*.py
-      - name: Install Xvfb
+
+      - name: Run unit tests
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
-      - name: Run unit tests with Xvfb
-        run: |
-          xvfb-run --auto-servernum python -m unittest discover -s src/test/python
+          python -m unittest discover -s ./src/test/python
