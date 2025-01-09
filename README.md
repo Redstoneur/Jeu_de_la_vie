@@ -21,7 +21,7 @@
 
 ![Latest Release](https://img.shields.io/github/v/release/Redstoneur/Jeu_de_la_vie)
 ![Release Date](https://img.shields.io/github/release-date/Redstoneur/Jeu_de_la_vie)
-![Build Status](https://github.com/Redstoneur/Jeu_de_la_vie/actions/workflows/code_quality_checks.yml/badge.svg)
+[![Build Status](https://github.com/Redstoneur/Jeu_de_la_vie/actions/workflows/build.yml/badge.svg)](https://github.com/Redstoneur/Jeu_de_la_vie/actions/workflows/build.yml)
 ---
 
 Le jeu de la vie est un automate cellulaire inventé par John Horton Conway en 1970. Il s'agit d'un jeu de simulation
@@ -40,7 +40,7 @@ Le jeu de la vie se déroule sur une grille bidimensionnelle. Chaques cellules p
 
 Le jeu de la vie peut être exécuté en utilisant le langage de programmation Python et la bibliothèque Tkinter.
 
-La version python minimale requise pour exécuter le programme est la version `3.8.5`.
+La version python minimale requise pour exécuter le programme est la version `3.8`.
 
 Avant de l'exécuter, assurez-vous d'avoir installé les dépendances en exécutant la commande suivante :
 
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 Ensuite, vous pouvez lancer le programme en tapant la commande suivante dans un terminal :
 
 ```bash
-python jeu_de_la_vie.py
+python ./src/main/python/main.py
 ```
 
 Le programme affichera une grille initiale de cellules. Vous pouvez cliquer sur les cellules pour les faire vivre ou
@@ -73,6 +73,10 @@ Lightweight spaceship : Un vaisseau plus grand qui se déplace horizontalement e
 Vous pouvez personnaliser le jeu de la vie en modifiant les paramètres du programme. Par exemple, vous pouvez ajuster la
 taille de la grille, la vitesse de l'évolution, ou la liste des modèles prédéfinis. Le code est entièrement modifiable
 et peut être adapté à vos besoins.
+
+## Téléchargement
+
+Vous pouvez télécharger la dernière version du programme au format `.exe` à partir de la [dernière release](https://github.com/Redstoneur/Jeu_de_la_vie/releases/latest).
 
 ## Crédits
 
