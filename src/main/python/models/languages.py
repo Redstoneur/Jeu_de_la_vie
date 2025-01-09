@@ -51,7 +51,7 @@ class Languages(enum.Enum):
         Return the system language
         :return: The system language
         """
-        return Languages.get_languages(locale.getdefaultlocale()[0])
+        return Languages.get_languages(locale.getlocale()[0])
 
     @staticmethod
     def get_dictionary_language(language: 'Languages') -> dict:
