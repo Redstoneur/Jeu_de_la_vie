@@ -4,7 +4,7 @@
 
 import os
 
-os.chdir(os.path.join(os.getcwd().split("Jeu_de_la_vie")[0], "Jeu_de_la_vie", "src", "main"))
+os.chdir(os.path.join(os.getcwd().rpartition("Jeu_de_la_vie")[0], "Jeu_de_la_vie", "src", "main"))
 
 import json
 import tempfile
