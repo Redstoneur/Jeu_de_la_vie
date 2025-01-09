@@ -4,14 +4,7 @@
 
 import os
 
-if os.getcwd()!= os.path.dirname(os.path.abspath(__file__)):
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Change the working directory to 'src/main/' if the current working directory ends with 'test\\python'
-if os.getcwd().endswith("test\\python"):
-    # Attempt to change the working directory to 'src/main/'
-    # Adjust the path as necessary based on the actual structure
-    os.chdir(os.path.join(os.getcwd(), "..", "..", "main"))
+os.chdir(os.path.join(os.getcwd().split("Jeu_de_la_vie")[0], "Jeu_de_la_vie", "src", "main"))
 
 # import locale
 import unittest
@@ -43,8 +36,10 @@ class LanguagesTests(unittest.TestCase):
         """
         Test the retrieval of language dictionaries through the get_dictionary method.
         """
-        self.assertEqual(Languages.FR.get_dictionary(), Languages.get_dictionary_language(Languages.FR))
-        self.assertEqual(Languages.EN.get_dictionary(), Languages.get_dictionary_language(Languages.EN))
+        self.assertEqual(Languages.FR.get_dictionary(),
+                         Languages.get_dictionary_language(Languages.FR))
+        self.assertEqual(Languages.EN.get_dictionary(),
+                         Languages.get_dictionary_language(Languages.EN))
 
     def test_get_languages_french(self):
         """
@@ -80,11 +75,13 @@ class LanguagesTests(unittest.TestCase):
         """
         self.assertEqual(
             Languages.get_dictionary_language(Languages.FR),
-            JSONFile.read_json_file(os.path.join(ResourcesPath, "languages", f"{Languages.FR}.json"))
+            JSONFile.read_json_file(
+                os.path.join(ResourcesPath, "languages", f"{Languages.FR}.json"))
         )
         self.assertEqual(
             Languages.get_dictionary_language(Languages.EN),
-            JSONFile.read_json_file(os.path.join(ResourcesPath, "languages", f"{Languages.EN}.json"))
+            JSONFile.read_json_file(
+                os.path.join(ResourcesPath, "languages", f"{Languages.EN}.json"))
         )
 
 ##############################################################################################

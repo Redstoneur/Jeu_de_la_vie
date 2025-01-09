@@ -4,16 +4,7 @@
 
 import os
 
-## récupérer le répertoire courant du fichier main.py sans os.get
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Change the working directory to 'src/main/' if the current working directory ends with 'test\\python'
-if os.getcwd().endswith("test\\python"):
-    # Attempt to change the working directory to 'src/main/'
-    # Adjust the path as necessary based on the actual structure
-    os.chdir(os.path.join(os.getcwd(), "..", "..", "main"))
-
-print(os.getcwd())
+os.chdir(os.path.join(os.getcwd().split("Jeu_de_la_vie")[0], "Jeu_de_la_vie", "src", "main"))
 
 import unittest
 
@@ -21,6 +12,7 @@ from src.test.python.model.languagesTest import LanguagesTests
 from src.test.python.utiles.jsonFileTest import JSONFileTests
 from src.test.python.views.dimensionsWindowsTest import DimensionsWindowsTests
 from src.test.python.views.gameOfLifeTest import GameOfLifeTests
+
 
 ##############################################################################################
 ### Suite Function ###########################################################################
@@ -39,6 +31,7 @@ def suite():
     suite.addTest(unittest.makeSuite(DimensionsWindowsTests))
     suite.addTest(unittest.makeSuite(GameOfLifeTests))
     return suite
+
 
 ##############################################################################################
 ### Main Execution ##########################################################################
