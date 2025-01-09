@@ -25,12 +25,12 @@ def suite():
     Combines tests from LanguagesTests, JSONFileTests, DimensionsWindowsTests, and GameOfLifeTests
     into a single test suite, allowing for the grouped execution of tests across different modules.
     """
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(LanguagesTests))
-    suite.addTest(unittest.makeSuite(JSONFileTests))
-    suite.addTest(unittest.makeSuite(DimensionsWindowsTests))
-    suite.addTest(unittest.makeSuite(GameOfLifeTests))
-    return suite
+    sequence = unittest.TestSuite()
+    sequence.addTest(unittest.makeSuite(LanguagesTests))
+    sequence.addTest(unittest.makeSuite(JSONFileTests))
+    sequence.addTest(unittest.makeSuite(DimensionsWindowsTests))
+    sequence.addTest(unittest.makeSuite(GameOfLifeTests))
+    return sequence
 
 
 ##############################################################################################
@@ -38,11 +38,11 @@ def suite():
 ##############################################################################################
 
 if __name__ == '__main__':
-    """
-    Main execution block.
+    # Main execution block.
+    #
+    # If this script is executed as the main program, it creates a test runner and runs the test
+    # sequence defined by the suite() function, allowing for the execution of all included unit
+    # tests.
 
-    If this script is executed as the main program, it creates a test runner and runs the test suite
-    defined by the suite() function, allowing for the execution of all included unit tests.
-    """
     runner = unittest.TextTestRunner()
     runner.run(suite())

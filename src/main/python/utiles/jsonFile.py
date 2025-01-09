@@ -10,6 +10,9 @@ import json
 
 
 class JSONFile:
+    """
+    JSON file
+    """
 
     @staticmethod
     def read_json_file(file_path: str, encoding: str = "utf-8") -> dict:

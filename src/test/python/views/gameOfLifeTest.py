@@ -33,7 +33,8 @@ class GameOfLifeTests(unittest.TestCase):
         """
         Set up the test environment before each test.
 
-        Initializes a GameOfLife instance with a mocked Tk master to avoid GUI operations during tests.
+        Initializes a GameOfLife instance with a mocked Tk master to avoid GUI operations
+        during tests.
         """
         self.lang = Languages.EN  # Assuming ENGLISH is a valid enum in Languages
         self.game = GameOfLife(self.lang)
@@ -126,6 +127,23 @@ class MockEvent(Event):
         self.x = x
         self.y = y
 
+    def get_coordinates(self):
+        """
+        Retourner les coordonnées de l'événement.
+        """
+        return self.x, self.y
+
+    def get_x(self):
+        """
+        Retourner la coordonnée x de l'événement.
+        """
+        return self.x
+
+    def get_y(self):
+        """
+        Retourner la coordonnée y de l'événement.
+        """
+        return self.y
 
 ##############################################################################################
 ### Execution ################################################################################

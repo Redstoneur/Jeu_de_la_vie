@@ -57,7 +57,8 @@ class LanguagesTests(unittest.TestCase):
         """
         self.assertEqual(Languages.get_languages("en_US"), Languages.EN)
         self.assertEqual(Languages.get_languages("en_GB"), Languages.EN)
-        # This line seems to incorrectly map German locale to English language, possibly a mistake or a placeholder for a test scenario.
+        # This line seems to incorrectly map German locale to English language, possibly a mistake
+        # or a placeholder for a test scenario.
         self.assertEqual(Languages.get_languages("de_DE"), Languages.EN)
 
     # def test_get_system_language(self):

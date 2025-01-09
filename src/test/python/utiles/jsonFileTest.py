@@ -21,15 +21,18 @@ class JSONFileTests(unittest.TestCase):
     """
     Test suite for JSONFile utility functions.
 
-    This class contains unit tests for reading from and writing to JSON files using the JSONFile utility.
-    It tests both valid and invalid paths and data to ensure robust error handling and correct functionality.
+    This class contains unit tests for reading from and writing to JSON files using
+    the JSONFile utility.
+    It tests both valid and invalid paths and data to ensure robust error handling and
+    correct functionality.
     """
 
     def test_read_json_file_valid_path(self):
         """
         Test reading from a JSON file with a valid path.
 
-        Ensures that the JSONFile.read_json_file function correctly reads data from a valid file path.
+        Ensures that the JSONFile.read_json_file function correctly reads data from
+        a valid file path.
         """
         data = {"key": "value"}
         with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
@@ -71,8 +74,8 @@ class JSONFileTests(unittest.TestCase):
         """
         Test writing to a JSON file with an invalid path.
 
-        Ensures that the JSONFile.write_json_file function raises a FileNotFoundError when attempting
-        to write to a non-existent directory.
+        Ensures that the JSONFile.write_json_file function raises a FileNotFoundError when
+        attempting to write to a non-existent directory.
         """
         data = {"key": "value"}
         with self.assertRaises(FileNotFoundError):

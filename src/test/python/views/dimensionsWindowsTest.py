@@ -105,7 +105,8 @@ class DimensionsWindowsTests(unittest.TestCase):
         """
         Test that cancelling does not change the dimensions.
 
-        Ensures that the cancel method does not alter the current dimensions and destroys the window.
+        Ensures that the cancel method does not alter the current dimensions and
+        destroys the window.
         """
         original_height = Dimensions["Interface"]["Height"]
         original_width = Dimensions["Interface"]["Width"]

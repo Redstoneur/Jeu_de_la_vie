@@ -43,8 +43,7 @@ class Languages(enum.Enum):
         """
         if system_language in ["fr_FR", "fr_BE", "fr_CA", "fr_CH", "fr_LU"]:
             return Languages.FR
-        else:
-            return Languages.EN
+        return Languages.EN
 
     @staticmethod
     def get_system_language() -> 'Languages':
@@ -62,11 +61,15 @@ class Languages(enum.Enum):
         :return: The dictionary of the language
         """
         try:
-            return JSONFile.read_json_file(os.path.join(ResourcesPath, "languages", f"{language}.json"))
+            return JSONFile.read_json_file(
+                os.path.join(ResourcesPath, "languages", f"{language}.json")
+            )
         except FileNotFoundError:
-            return JSONFile.read_json_file(os.path.join(ResourcesPath, "languages", f"{Languages.EN}.json"))
+            return JSONFile.read_json_file(
+                os.path.join(ResourcesPath, "languages", f"{Languages.EN}.json")
+            )
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Erreur inattendue: {e}")
             return {}
 
 ##############################################################################################
